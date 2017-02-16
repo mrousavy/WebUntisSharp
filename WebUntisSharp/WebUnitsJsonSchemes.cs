@@ -448,7 +448,32 @@ namespace WebUntisSharp {
         }
 
         //20
-        namespace ClassregEvents { }
+        namespace ClassregEvents {
+            //Request classregevents for the given date range
+            public class ClassregEvents : WebUntisQuery {
+                public new readonly string method = "getClassregEvents";
+
+                public new class @params {
+                    public long startDate;
+                    public long endDate;
+                }
+            }
+
+            public class Event {
+                public string studentid;
+                public string surname;
+                public string forname;
+                public long date;
+                public string subject;
+                public string reason;
+                public string text;
+            }
+
+            //Result from ClassregEvent Query
+            public class ClassregEventsResult : WebUntisResult {
+                public new Event[] result;
+            }
+        }
 
         //21
         namespace Exams { }
