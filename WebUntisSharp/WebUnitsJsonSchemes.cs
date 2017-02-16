@@ -258,7 +258,6 @@ namespace WebUntisSharp {
             }
         }
 
-
         //12.
         namespace CurrentSchoolyear {
             //Get Data for the current schoolyear
