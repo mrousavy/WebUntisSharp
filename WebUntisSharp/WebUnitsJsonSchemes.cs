@@ -259,7 +259,25 @@ namespace WebUntisSharp {
 
 
         //12.
-        namespace CurrentSchoolyear { }
+        namespace CurrentSchoolyear {
+            //Get Data for the current schoolyear
+            public class CurrentSchoolyear : WebUntisQuery {
+                public new readonly string method = "getCurrentSchoolyear";
+            }
+
+            //Response for Get Schoolyear
+            public class SchoolyearResult : WebUntisResult {
+                public new Schoolyear[] result;
+            }
+
+            //Individual Schoolyears
+            public class Schoolyear {
+                public int id;
+                public string name;
+                public long startDate;
+                public long endDate;
+            }
+        }
 
         //13.
         namespace SchoolYears { }
