@@ -507,7 +507,12 @@ namespace WebUntisSharp {
         }
 
         //22
-        namespace ExamTypes { }
+        namespace ExamTypes {
+            //Request Exam Types
+            public class ExamTypes : WebUntisQuery {
+                public new readonly string method = "getExamTypes";
+            }
+        }
         #endregion
     }
 }
