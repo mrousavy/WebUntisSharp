@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace WebUntisSharp {
     //All JSON Queries from the WebUntis API translated to C#
     namespace WebUnitsJsonSchemes {
@@ -237,7 +239,24 @@ namespace WebUntisSharp {
         }
 
         //11.
-        namespace StatusData { }
+        namespace StatusData {
+            //Request Status Data
+            public class StatusData : WebUntisQuery {
+                public new string method = "getStatusData";
+            }
+
+            //Result from Request Status Data Query
+            public class StatusDataResult : WebUntisResult {
+                public KeyValuePair<string, Colors> lstypes;
+                public KeyValuePair<string, Colors> codes;
+            }
+
+            public class Colors {
+                public string foreColor;
+                public string backColor;
+            }
+        }
+
 
         //12.
         namespace CurrentSchoolyear { }
