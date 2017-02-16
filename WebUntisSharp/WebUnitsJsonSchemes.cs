@@ -1,14 +1,13 @@
 namespace WebUntisSharp {
     //All JSON Queries from the WebUntis API translated to C#
     namespace WebUnitsJsonSchemes {
+        //Base-Classes/Schemes for Queries and Responses
         #region Special Classes
         //Base-Class for all Queries
         public class WebUntisQuery {
             public string id;
             public string method;
             public string jsonrpc = "2.0";
-            //public @params @params;
-
             public class @params { }
         }
 
@@ -18,12 +17,6 @@ namespace WebUntisSharp {
             public object result;
             public string jsonrpc = "2.0";
         }
-        //Parameter Class for JSON Query Method Parameters
-        //public class @params {
-        //    public string user = "ANDROID";
-        //    public string password;
-        //    public string client;
-        //}
         #endregion
 
         //22 JSON Queries, see Resources/WebUntis_JSON_API.pdf
@@ -259,22 +252,22 @@ namespace WebUntisSharp {
         //[removed]
 
         //17
-        namespace StatusData { }
+        namespace LastImportTime { }
 
         //18
-        namespace StatusData { }
+        namespace PersonIdSearch { }
 
         //19
-        namespace StatusData { }
+        namespace Substitutions { }
 
         //20
-        namespace StatusData { }
+        namespace ClassregEvents { }
 
         //21
-        namespace StatusData { }
+        namespace Exams { }
 
         //22
-        namespace StatusData { }
+        namespace ExamTypes { }
         #endregion
     }
 }
