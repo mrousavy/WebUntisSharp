@@ -31,6 +31,7 @@ namespace WebUntisSharp {
                 public readonly new string method = "authenticate";
 
                 public new class @params {
+                    public string school;
                     public string user = "ANDROID";
                     public string password;
                     public string client;
@@ -301,7 +302,62 @@ namespace WebUntisSharp {
         }
 
         //14 & 15
-        namespace TimetableForElement { }
+        namespace TimetableForElement {
+            //Get Timetable for element
+            public class TimetableForElement : WebUntisQuery {
+                public new readonly string method = "getTimetable";
+                public new class @params {
+                    public int id;
+                    public int type;
+                    public long startDate;
+                    public long endDate;
+                }
+            }
+
+            //Timetable Result
+            public class TimetableResult : WebUntisResult {
+                public new int id;
+                public long date;
+                public long startTime;
+                public long endTime;
+
+                //array of klassen ids
+                public int[] kl;
+                //array of teacher ids
+                public int[] te;
+                //array of subject ids
+                public int[] su;
+                //array of room ids
+                public int[] ro;
+
+                //„ls“ (lesson) | „oh“ (office hour) | „sb“ (standby) | „bs“ (break supervision) | „ex“ (examination)
+                //omitted if lesson
+                public string lstype;
+
+                //„“ | „cancelled“ | „irregular“
+                //omitted if empty
+                public string code;
+
+                //text of the lesson, omitted if empty
+                public string lstext;
+
+                //statistical flags of the lesson, omitted if empty
+                public string statflags;
+            }
+
+            //Response for Get Schoolyear
+            public class SchoolyearResult : WebUntisResult {
+                public new Schoolyear[] result;
+            }
+
+            //Individual Schoolyears
+            public class Schoolyear {
+                public int id;
+                public string name;
+                public long startDate;
+                public long endDate;
+            }
+        }
 
         //16
         //[removed]
