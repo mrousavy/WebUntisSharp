@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace WebUntisSharp {
@@ -362,7 +363,17 @@ namespace WebUntisSharp {
         //[removed]
 
         //17
-        namespace LastImportTime { }
+        namespace LastImportTime {
+            //Get last import time
+            public class LastImportTime : WebUntisQuery {
+                public new string method = "getLatestImportTime";
+            }
+
+            //Last import time Result
+            public class LastImportTimeResult {
+                public DateTime result;
+            }
+        }
 
         //18
         namespace PersonIdSearch { }
