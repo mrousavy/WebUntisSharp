@@ -453,7 +453,7 @@ namespace WebUntisSharp {
             public class ClassregEvents : WebUntisQuery {
                 public new readonly string method = "getClassregEvents";
 
-                public new class @params {
+                public new struct @params {
                     public long startDate;
                     public long endDate;
                 }
@@ -476,7 +476,35 @@ namespace WebUntisSharp {
         }
 
         //21
-        namespace Exams { }
+        namespace Exams {
+            //Request Exams
+            public class RequestExams : WebUntisQuery {
+                public new readonly string method = "getExams";
+
+                public new struct @params {
+                    public int examTypeId;
+                    public long startDate;
+                    public long endDate;
+                }
+            }
+
+            //Result of Request Exams
+            public class ExamResult : WebUntisResult {
+                public new Exam[] result;
+            }
+
+
+            //Exam Class
+            public class Exam : WebUntisResult {
+                public int[] classes;
+                public int[] teachers;
+                public int[] students;
+                public int subject;
+                public long date;
+                public long startTime;
+                public long endTime;
+            }
+        }
 
         //22
         namespace ExamTypes { }
