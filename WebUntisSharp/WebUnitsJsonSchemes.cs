@@ -280,7 +280,25 @@ namespace WebUntisSharp {
         }
 
         //13.
-        namespace SchoolYears { }
+        namespace SchoolYears {
+            //Get Data for the schoolyears
+            public class Schoolyears : WebUntisQuery {
+                public new readonly string method = "getSchoolyears";
+            }
+
+            //Response for Get Schoolyear
+            public class SchoolyearResult : WebUntisResult {
+                public new Schoolyear[] result;
+            }
+
+            //Individual Schoolyears
+            public class Schoolyear {
+                public int id;
+                public string name;
+                public long startDate;
+                public long endDate;
+            }
+        }
 
         //14 & 15
         namespace TimetableForElement { }
