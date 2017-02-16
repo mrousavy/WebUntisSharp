@@ -400,7 +400,52 @@ namespace WebUntisSharp {
         }
 
         //19
-        namespace Substitutions { }
+        namespace Substitutions {
+            //Request substitutions for the given date range
+            public class Substitutions : WebUntisQuery {
+                public new readonly string method = "getSubstitutions";
+
+                public new class @params {
+                    public long startDate;
+                    public long endDate;
+                    public int departmentId = 0;
+                }
+            }
+
+            //Result of Get Substitutions
+            public class SubstitutionResult : WebUntisResult {
+                public new Substitution[] result;
+            }
+
+            //Individual Substitutions
+            public class Substitution {
+                //type of substitution:
+                //cancel = cancellation | subst = teacher substitution | add = additional period | shift = shifted period | rmchg = room change
+                public string type;
+
+                public ID id;
+                public long date;
+                public long startTime;
+                public long endTime;
+                public int[] kl;
+                public int[] te;
+                public int[] su;
+                public int[] ro;
+                public int[] txt;
+                public Reschedule reschedule;
+            }
+
+            public class ID {
+                public int id;
+                public int orgid;
+            }
+
+            public class Reschedule {
+                public int date;
+                public int startTime;
+                public int endTime;
+            }
+        }
 
         //20
         namespace ClassregEvents { }
