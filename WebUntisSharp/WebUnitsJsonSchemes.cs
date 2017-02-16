@@ -110,23 +110,41 @@ namespace WebUntisSharp {
                 }
             }
 
-            //Classes (Klassen) class
+            //Individual Classes (Klassen)
             public class Class {
-                string name;
-                string longName;
-                string foreColor;
-                string backColor;
-                int did;
+                public int id;
+                public string name;
+                public string longName;
+                public string foreColor;
+                public string backColor;
+                public int did;
             }
 
-            //Result of GetClasses
+            //Result of GetClasses Query
             public class ClassesResult : WebUntisResult {
-                public new Class result;
+                public new Class[] result;
             }
         }
 
         namespace Subjects {
+            //Get List of Subjects
+            public class GetSubjects : WebUntisQuery {
+                public new string method = "getSubjects";
+            }
 
+            //Individual Subjects
+            public class Subject {
+                public int id;
+                public string name;
+                public string longName;
+                public string foreColor;
+                public string backColor;
+            }
+
+            //Result of GetSubjects Query
+            public class SubjectsResult : WebUntisResult {
+                public new Subject[] result;
+            }
         }
         #endregion
     }
