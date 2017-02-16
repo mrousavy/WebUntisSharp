@@ -11,7 +11,7 @@ namespace WebUntisSharp {
             public string id;
             public string method;
             public string jsonrpc = "2.0";
-            public class @params { }
+            public struct @params { }
         }
 
         //Base-Class for all Responses
@@ -107,7 +107,7 @@ namespace WebUntisSharp {
             //Get Classes (Klassen) for schoolyear
             public class GetClasses : WebUntisQuery {
                 public new readonly string method = "getKlassen";
-                public new class @params {
+                public new struct @params {
                     string schoolyearId;
                 }
             }
@@ -306,7 +306,7 @@ namespace WebUntisSharp {
             //Get Timetable for element
             public class TimetableForElement : WebUntisQuery {
                 public new readonly string method = "getTimetable";
-                public new class @params {
+                public new struct @params {
                     public int id;
                     public int type;
                     public long startDate;
@@ -366,7 +366,7 @@ namespace WebUntisSharp {
         namespace LastImportTime {
             //Get last import time
             public class LastImportTime : WebUntisQuery {
-                public new string method = "getLatestImportTime";
+                public new readonly string method = "getLatestImportTime";
             }
 
             //Last import time Result
@@ -376,7 +376,28 @@ namespace WebUntisSharp {
         }
 
         //18
-        namespace PersonIdSearch { }
+        namespace PersonIdSearch {
+            //Get Id of the person (teacher or student) from the name
+            public class SearchPersonId : WebUntisQuery {
+                public new readonly string method = "getPersonId";
+
+                public new struct @params {
+                    //Type of Person | 2 = Teacher, 5 = Student
+                    public int type;
+                    //Surname
+                    public string sn;
+                    //Forename
+                    public string fn;
+                    //Birthdata | default = 0
+                    public int dob;
+                }
+            }
+
+            //Response of Search Person ID
+            public class SearchPersonIdResult : WebUntisResult {
+                public new int result;
+            }
+        }
 
         //19
         namespace Substitutions { }
