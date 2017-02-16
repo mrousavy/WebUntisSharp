@@ -26,7 +26,9 @@ namespace WebUntisSharp {
         //}
         #endregion
 
+        //22 JSON Queries, see Resources/WebUntis_JSON_API.pdf
         #region Individual Queries
+        //1 & 2.
         namespace Sessions {
             //Authenticate the given user and start a session
             public class Authentication : WebUntisQuery {
@@ -54,6 +56,7 @@ namespace WebUntisSharp {
             }
         }
 
+        //3.
         namespace Teachers {
             //Get list of teachers
             public class GetTeachers : WebUntisQuery {
@@ -77,6 +80,7 @@ namespace WebUntisSharp {
             }
         }
 
+        //4.
         namespace Students {
             //Get list of Students
             public class GetStudents : WebUntisQuery {
@@ -101,6 +105,7 @@ namespace WebUntisSharp {
             }
         }
 
+        //5.
         namespace Classes {
             //Get Classes (Klassen) for schoolyear
             public class GetClasses : WebUntisQuery {
@@ -126,6 +131,7 @@ namespace WebUntisSharp {
             }
         }
 
+        //6.
         namespace Subjects {
             //Get List of Subjects
             public class GetSubjects : WebUntisQuery {
@@ -146,6 +152,129 @@ namespace WebUntisSharp {
                 public new Subject[] result;
             }
         }
+
+        //7.
+        namespace Rooms {
+            //Get List of Rooms
+            public class GetRooms : WebUntisQuery {
+                public new string method = "getRooms";
+            }
+
+            //Individual Room
+            public class Room {
+                public int id;
+                public string name;
+                public string longName;
+                public string foreColor;
+                public string backColor;
+            }
+
+            //Result of GetRooms Query
+            public class RoomsResult : WebUntisResult {
+                public new Room[] result;
+            }
+        }
+
+        //8.
+        namespace Departments {
+            //Get List of Departments
+            public class GetDepartments : WebUntisQuery {
+                public new string method = "getDepartments";
+            }
+
+            //Individual Department
+            public class Department {
+                public int id;
+                public string name;
+                public string longName;
+            }
+
+            //Result of GetDepartments Query
+            public class DepartmentsResult : WebUntisResult {
+                public new Department[] result;
+            }
+        }
+
+        //9.
+        namespace Holidays {
+            //Get List of Holidays
+            public class GetHolidays : WebUntisQuery {
+                public new string method = "getHolidays";
+            }
+
+            //Individual Holiday
+            public class Holiday {
+                public int id;
+                public string name;
+                public string longName;
+                public long startDate;
+                public long endDate;
+            }
+
+            //Result of GetHolidays Query
+            public class HolidaysResult : WebUntisResult {
+                public new Holiday[] result;
+            }
+        }
+
+        //10.
+        namespace Timegrid {
+            //Get List of Timegrids
+            public class GetTimegrids : WebUntisQuery {
+                public new string method = "getTimegridUnits";
+            }
+
+            //Individual Timegrids
+            public class Timegrid {
+                //Day of the Week, 1 = sunday, 2 = monday, .. 7 = saturday
+                public int day;
+                public TimeUnit[] timeUnits;
+            }
+
+            //Individual TimeUnits
+            public class TimeUnit {
+                public long startTime;
+                public long endTime;
+            }
+
+            //Result of Timegrids Query
+            public class TimegridsResult : WebUntisResult {
+                public new Timegrid[] result;
+            }
+        }
+
+        //11.
+        namespace StatusData { }
+
+        //12.
+        namespace CurrentSchoolyear { }
+
+        //13.
+        namespace SchoolYears { }
+
+        //14 & 15
+        namespace TimetableForElement { }
+
+        //16
+        //[removed]
+
+        //17
+        namespace StatusData { }
+
+        //18
+        namespace StatusData { }
+
+        //19
+        namespace StatusData { }
+
+        //20
+        namespace StatusData { }
+
+        //21
+        namespace StatusData { }
+
+        //22
+        namespace StatusData { }
         #endregion
     }
 }
