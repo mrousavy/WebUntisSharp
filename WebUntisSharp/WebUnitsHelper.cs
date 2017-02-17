@@ -15,6 +15,7 @@ using WebUntisSharp.WebUnitsJsonSchemes.Students;
 using WebUntisSharp.WebUnitsJsonSchemes.Subjects;
 using WebUntisSharp.WebUnitsJsonSchemes.Teachers;
 using WebUntisSharp.WebUnitsJsonSchemes.Timegrid;
+using WebUntisSharp.WebUnitsJsonSchemes.TimetableForElement;
 using Schoolyear = WebUntisSharp.WebUnitsJsonSchemes.CurrentSchoolyear.Schoolyear;
 using wus = WebUntisSharp.WebUnitsJsonSchemes;
 
@@ -328,6 +329,39 @@ namespace WebUntisSharp {
 
             //Return the Schoolyears
             return new List<Schoolyear>(result.result);
+        }
+
+        /// <summary>
+        /// Get a Timetable for an Element
+        /// </summary>
+        /// <param name="elementId">The ID of the Element</param>
+        /// <param name="elementType">The type of the Element (1 = klasse, 2 = teacher, 3 = subject, 4 = room, 5 = student)</param>
+        /// <param name="startDate">The Start Date of the Timetable</param>
+        /// <param name="endDate">The End Date of the Timetable</param>
+        /// <returns>The returned Timetable</returns>
+        public TimetableResult GetTimetableForElement(int elementId, int elementType, long startDate, long endDate) {
+            //Get the JSON
+            TimetableForElement timetable = new TimetableForElement() {
+                @params = new TimetableForElement.Params() {
+                    id = elementId,
+                    type = elementType,
+                    startDate = startDate,
+                    endDate = endDate
+                }
+            };
+
+            //Send and receive JSON from WebUntis
+            string requestJson = JsonConvert.SerializeObject(timetable);
+            string responseJson = SendJsonAndWait(requestJson, _url);
+
+            //Parse JSON to Class
+            TimetableResult result = JsonConvert.DeserializeObject<TimetableResult>(responseJson);
+
+            if(wus.LastError.Message != null)
+                throw new Exception(wus.LastError.Message);
+
+            //Return the Timetable for the Element
+            return result;
         }
 
         #region Private Methods

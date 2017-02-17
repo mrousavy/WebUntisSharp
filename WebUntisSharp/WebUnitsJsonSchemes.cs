@@ -318,15 +318,7 @@ namespace WebUntisSharp {
 
             //Response for Get Schoolyear
             public class SchoolyearResult : WebUntisResult {
-                public new Schoolyear[] result;
-            }
-
-            //Individual Schoolyears
-            public class Schoolyear {
-                public int id;
-                public string name;
-                public long startDate;
-                public long endDate;
+                public new CurrentSchoolyear.Schoolyear[] result;
             }
         }
 
