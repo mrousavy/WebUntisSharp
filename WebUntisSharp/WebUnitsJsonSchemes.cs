@@ -10,15 +10,24 @@ namespace WebUntisSharp {
         public class WebUntisQuery {
             public string id;
             public string method;
-            public string jsonrpc = "2.0";
-            public struct @params { }
+            public readonly string jsonrpc = "2.0";
         }
 
         //Base-Class for all Responses
         public class WebUntisResult {
             public string id;
             public object result;
-            public string jsonrpc = "2.0";
+            public readonly string jsonrpc = "2.0";
+
+            public string error {
+                get { return _error; }
+                set {
+                    _error = value;
+                    throw new Exception(error);
+                }
+            }
+
+            private string _error;
         }
         #endregion
 
@@ -28,10 +37,10 @@ namespace WebUntisSharp {
         namespace Sessions {
             //Authenticate the given user and start a session
             public class Authentication : WebUntisQuery {
-                public new string id;
-                public readonly new string method = "authenticate";
+                public new readonly string method = "authenticate";
+                public Params @params;
 
-                public new class @params {
+                public class Params {
                     public string school;
                     public string user = "ANDROID";
                     public string password;
@@ -107,7 +116,9 @@ namespace WebUntisSharp {
             //Get Classes (Klassen) for schoolyear
             public class GetClasses : WebUntisQuery {
                 public new readonly string method = "getKlassen";
-                public new struct @params {
+                public Params @params;
+
+                public class Params {
                     string schoolyearId;
                 }
             }
@@ -306,7 +317,9 @@ namespace WebUntisSharp {
             //Get Timetable for element
             public class TimetableForElement : WebUntisQuery {
                 public new readonly string method = "getTimetable";
-                public new struct @params {
+                public Params @params;
+
+                public class Params {
                     public int id;
                     public int type;
                     public long startDate;
@@ -380,8 +393,9 @@ namespace WebUntisSharp {
             //Get Id of the person (teacher or student) from the name
             public class SearchPersonId : WebUntisQuery {
                 public new readonly string method = "getPersonId";
+                public Params @params;
 
-                public new struct @params {
+                public class Params {
                     //Type of Person | 2 = Teacher, 5 = Student
                     public int type;
                     //Surname
@@ -404,8 +418,9 @@ namespace WebUntisSharp {
             //Request substitutions for the given date range
             public class Substitutions : WebUntisQuery {
                 public new readonly string method = "getSubstitutions";
+                public Params @params;
 
-                public new class @params {
+                public class Params {
                     public long startDate;
                     public long endDate;
                     public int departmentId = 0;
@@ -452,8 +467,9 @@ namespace WebUntisSharp {
             //Request classregevents for the given date range
             public class ClassregEvents : WebUntisQuery {
                 public new readonly string method = "getClassregEvents";
+                public Params @params;
 
-                public new struct @params {
+                public class Params {
                     public long startDate;
                     public long endDate;
                 }
@@ -480,8 +496,9 @@ namespace WebUntisSharp {
             //Request Exams
             public class RequestExams : WebUntisQuery {
                 public new readonly string method = "getExams";
+                public Params @params;
 
-                public new struct @params {
+                public class Params {
                     public int examTypeId;
                     public long startDate;
                     public long endDate;
