@@ -4,15 +4,18 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using WebUntisSharp.WebUnitsJsonSchemes.Classes;
+using WebUntisSharp.WebUnitsJsonSchemes.CurrentSchoolyear;
 using WebUntisSharp.WebUnitsJsonSchemes.Departments;
 using WebUntisSharp.WebUnitsJsonSchemes.Holidays;
 using WebUntisSharp.WebUnitsJsonSchemes.Rooms;
+using WebUntisSharp.WebUnitsJsonSchemes.SchoolYears;
 using WebUntisSharp.WebUnitsJsonSchemes.Sessions;
 using WebUntisSharp.WebUnitsJsonSchemes.StatusData;
 using WebUntisSharp.WebUnitsJsonSchemes.Students;
 using WebUntisSharp.WebUnitsJsonSchemes.Subjects;
 using WebUntisSharp.WebUnitsJsonSchemes.Teachers;
 using WebUntisSharp.WebUnitsJsonSchemes.Timegrid;
+using Schoolyear = WebUntisSharp.WebUnitsJsonSchemes.CurrentSchoolyear.Schoolyear;
 using wus = WebUntisSharp.WebUnitsJsonSchemes;
 
 namespace WebUntisSharp {
@@ -281,6 +284,50 @@ namespace WebUntisSharp {
 
             //Return the Status Data
             return result;
+        }
+
+        /// <summary>
+        /// Get the Current Schoolyear
+        /// </summary>
+        /// <returns>The current Schoolyear</returns>
+        public Schoolyear GetSchoolyear() {
+            //Get the JSON
+            CurrentSchoolyear schoolyear = new CurrentSchoolyear();
+
+            //Send and receive JSON from WebUntis
+            string requestJson = JsonConvert.SerializeObject(schoolyear);
+            string responseJson = SendJsonAndWait(requestJson, _url);
+
+            //Parse JSON to Class
+            Schoolyear result = JsonConvert.DeserializeObject<Schoolyear>(responseJson);
+
+            if(wus.LastError.Message != null)
+                throw new Exception(wus.LastError.Message);
+
+            //Return the Schoolyear
+            return result;
+        }
+
+        /// <summary>
+        /// Get all Schoolyears
+        /// </summary>
+        /// <returns>The returned Schoolyears</returns>
+        public List<Schoolyear> GetSchoolyears() {
+            //Get the JSON
+            Schoolyears schoolyears = new Schoolyears();
+
+            //Send and receive JSON from WebUntis
+            string requestJson = JsonConvert.SerializeObject(schoolyears);
+            string responseJson = SendJsonAndWait(requestJson, _url);
+
+            //Parse JSON to Class
+            wus.SchoolYears.SchoolyearResult result = JsonConvert.DeserializeObject<wus.SchoolYears.SchoolyearResult>(responseJson);
+
+            if(wus.LastError.Message != null)
+                throw new Exception(wus.LastError.Message);
+
+            //Return the Schoolyears
+            return new List<Schoolyear>(result.result);
         }
 
         #region Private Methods
