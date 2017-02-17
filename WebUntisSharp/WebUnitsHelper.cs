@@ -8,11 +8,7 @@ namespace WebUntisSharp {
 
     //Helper Class for WebUntis Requests/Responses (JSON/POST)
     public class WebUnitsHelper {
-        private static string url {
-            get {
-                return "http://" + school + "/WebUntis/jsonrpc.do";
-            }
-        }
+        private static string url => "http://" + school + "/WebUntis/jsonrpc.do";
         private static string school;
 
 
@@ -21,7 +17,7 @@ namespace WebUntisSharp {
             wus.Teachers.GetTeachers teachers = new wus.Teachers.GetTeachers() { id = id.ToString() };
             string queryJson = JsonConvert.SerializeObject(teachers);
 
-            //TODO: Send queryJson
+            SendJsonAndWait(queryJson);
 
             //TODO: Get response
             string responseJson = "";
@@ -35,11 +31,11 @@ namespace WebUntisSharp {
 
         //Send JSON
         private static void SendJson(string json) {
-            var httpWebRequest = (HttpWebRequest)WebRequest.Create(url);
+            HttpWebRequest httpWebRequest = (HttpWebRequest)WebRequest.Create(url);
             httpWebRequest.ContentType = "application/json";
             httpWebRequest.Method = "POST";
 
-            using(var streamWriter = new StreamWriter(httpWebRequest.GetRequestStream())) {
+            using(StreamWriter streamWriter = new StreamWriter(httpWebRequest.GetRequestStream())) {
                 streamWriter.Write(json);
                 streamWriter.Flush();
                 streamWriter.Close();
@@ -50,18 +46,18 @@ namespace WebUntisSharp {
         private static string SendJsonAndWait(string json) {
             string result;
 
-            var httpWebRequest = (HttpWebRequest)WebRequest.Create(url);
+            HttpWebRequest httpWebRequest = (HttpWebRequest)WebRequest.Create(url);
             httpWebRequest.ContentType = "application/json";
             httpWebRequest.Method = "POST";
 
-            using(var streamWriter = new StreamWriter(httpWebRequest.GetRequestStream())) {
+            using(StreamWriter streamWriter = new StreamWriter(httpWebRequest.GetRequestStream())) {
                 streamWriter.Write(json);
                 streamWriter.Flush();
                 streamWriter.Close();
             }
 
-            var httpResponse = (HttpWebResponse)httpWebRequest.GetResponse();
-            using(var streamReader = new StreamReader(httpResponse.GetResponseStream())) {
+            HttpWebResponse httpResponse = (HttpWebResponse)httpWebRequest.GetResponse();
+            using(StreamReader streamReader = new StreamReader(httpResponse.GetResponseStream())) {
                 result = streamReader.ReadToEnd();
             }
 
