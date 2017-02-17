@@ -8,9 +8,11 @@ using WebUntisSharp.WebUnitsJsonSchemes.Departments;
 using WebUntisSharp.WebUnitsJsonSchemes.Holidays;
 using WebUntisSharp.WebUnitsJsonSchemes.Rooms;
 using WebUntisSharp.WebUnitsJsonSchemes.Sessions;
+using WebUntisSharp.WebUnitsJsonSchemes.StatusData;
 using WebUntisSharp.WebUnitsJsonSchemes.Students;
 using WebUntisSharp.WebUnitsJsonSchemes.Subjects;
 using WebUntisSharp.WebUnitsJsonSchemes.Teachers;
+using WebUntisSharp.WebUnitsJsonSchemes.Timegrid;
 using wus = WebUntisSharp.WebUnitsJsonSchemes;
 
 namespace WebUntisSharp {
@@ -167,7 +169,7 @@ namespace WebUntisSharp {
             if(wus.LastError.Message != null)
                 throw new Exception(wus.LastError.Message);
 
-            //Return all the Students
+            //Return all the Subjects
             return new List<Subject>(result.result);
         }
 
@@ -189,7 +191,7 @@ namespace WebUntisSharp {
             if(wus.LastError.Message != null)
                 throw new Exception(wus.LastError.Message);
 
-            //Return all the Students
+            //Return all the Rooms
             return new List<Room>(result.result);
         }
 
@@ -211,7 +213,7 @@ namespace WebUntisSharp {
             if(wus.LastError.Message != null)
                 throw new Exception(wus.LastError.Message);
 
-            //Return all the Students
+            //Return all the Departments
             return new List<Department>(result.result);
         }
 
@@ -233,8 +235,52 @@ namespace WebUntisSharp {
             if(wus.LastError.Message != null)
                 throw new Exception(wus.LastError.Message);
 
-            //Return all the Students
+            //Return all the Holidays
             return new List<Holiday>(result.result);
+        }
+
+        /// <summary>
+        /// Get the Timegrid
+        /// </summary>
+        /// <returns>The returned Timegrid</returns>
+        public Timegrid GetTimegrid() {
+            //Get the JSON
+            GetTimegrid timegrid = new GetTimegrid();
+
+            //Send and receive JSON from WebUntis
+            string requestJson = JsonConvert.SerializeObject(timegrid);
+            string responseJson = SendJsonAndWait(requestJson, _url);
+
+            //Parse JSON to Class
+            Timegrid result = JsonConvert.DeserializeObject<Timegrid>(responseJson);
+
+            if(wus.LastError.Message != null)
+                throw new Exception(wus.LastError.Message);
+
+            //Return the Timegrid
+            return result;
+        }
+
+        /// <summary>
+        /// Get the StatusData
+        /// </summary>
+        /// <returns>The returned StatusData</returns>
+        public StatusData GetStatusData() {
+            //Get the JSON
+            GetStatusData statusData = new GetStatusData();
+
+            //Send and receive JSON from WebUntis
+            string requestJson = JsonConvert.SerializeObject(statusData);
+            string responseJson = SendJsonAndWait(requestJson, _url);
+
+            //Parse JSON to Class
+            StatusData result = JsonConvert.DeserializeObject<StatusData>(responseJson);
+
+            if(wus.LastError.Message != null)
+                throw new Exception(wus.LastError.Message);
+
+            //Return the Status Data
+            return result;
         }
 
         #region Private Methods

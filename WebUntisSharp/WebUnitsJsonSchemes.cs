@@ -246,7 +246,7 @@ namespace WebUntisSharp {
         //10.
         namespace Timegrid {
             //Get List of Timegrids
-            public class GetTimegrids : WebUntisQuery {
+            public class GetTimegrid : WebUntisQuery {
                 public new string method = "getTimegridUnits";
             }
 
@@ -264,7 +264,7 @@ namespace WebUntisSharp {
             }
 
             //Result of Timegrids Query
-            public class TimegridsResult : WebUntisResult {
+            public class TimegridResult : WebUntisResult {
                 public new Timegrid[] result;
             }
         }
@@ -272,12 +272,12 @@ namespace WebUntisSharp {
         //11.
         namespace StatusData {
             //Request Status Data
-            public class StatusData : WebUntisQuery {
+            public class GetStatusData : WebUntisQuery {
                 public new string method = "getStatusData";
             }
 
             //Result from Request Status Data Query
-            public class StatusDataResult : WebUntisResult {
+            public class StatusData : WebUntisResult {
                 public KeyValuePair<string, Colors> lstypes;
                 public KeyValuePair<string, Colors> codes;
             }
