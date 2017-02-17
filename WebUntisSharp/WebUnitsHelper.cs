@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using WebUntisSharp.WebUnitsJsonSchemes.Classes;
+using WebUntisSharp.WebUnitsJsonSchemes.Rooms;
 using WebUntisSharp.WebUnitsJsonSchemes.Sessions;
 using WebUntisSharp.WebUnitsJsonSchemes.Students;
 using WebUntisSharp.WebUnitsJsonSchemes.Subjects;
@@ -152,10 +153,10 @@ namespace WebUntisSharp {
         /// <returns>The <see cref="List{Subject}"/> of all returned Subjects.</returns>
         public List<Subject> GetSubjects() {
             //Get the JSON
-            GetSubjects students = new GetSubjects();
+            GetSubjects subjects = new GetSubjects();
 
             //Send and receive JSON from WebUntis
-            string requestJson = JsonConvert.SerializeObject(students);
+            string requestJson = JsonConvert.SerializeObject(subjects);
             string responseJson = SendJsonAndWait(requestJson, _url);
 
             //Parse JSON to Class
@@ -167,6 +168,29 @@ namespace WebUntisSharp {
             //Return all the Students
             return new List<Subject>(result.result);
         }
+
+        /// <summary>
+        /// Get a List of all Rooms
+        /// </summary>
+        /// <returns>The <see cref="List{Room}"/> of all returned Rooms.</returns>
+        public List<Room> GetRooms() {
+            //Get the JSON
+            GetRooms rooms = new GetRooms();
+
+            //Send and receive JSON from WebUntis
+            string requestJson = JsonConvert.SerializeObject(rooms);
+            string responseJson = SendJsonAndWait(requestJson, _url);
+
+            //Parse JSON to Class
+            RoomsResult result = JsonConvert.DeserializeObject<RoomsResult>(responseJson);
+
+            if(wus.LastError.Message != null)
+                throw new Exception(wus.LastError.Message);
+
+            //Return all the Students
+            return new List<Room>(result.result);
+        }
+
         #region Private Methods
         //Send JSON
         private static void SendJson(string json, string url) {
