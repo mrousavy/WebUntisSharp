@@ -9,26 +9,25 @@ namespace WebUntisSharp {
 
     //Helper Class for WebUntis Requests/Responses (JSON/POST)
     public class WebUnits {
-        private string Url => "http://" + _school + "/WebUntis/jsonrpc.do";
-        private readonly string _school;
+        private readonly string _url;
 
         public string SessionId;
 
 
-        public WebUnits(string client, string password, string school, string user) {
-            _school = school;
+        public WebUnits(string client, string password, string schoolUrl, string user) {
+            _url = schoolUrl;
 
             Authentication auth = new Authentication {
+                id = "1",
                 @params = new Authentication.Params {
                     client = client,
                     password = password,
-                    school = school,
                     user = user
                 }
             };
             string requestJson = JsonConvert.SerializeObject(auth);
 
-            string responseJson = SendJsonAndWait(requestJson, Url);
+            string responseJson = SendJsonAndWait(requestJson, _url);
 
             AuthenticationResult result = JsonConvert.DeserializeObject<AuthenticationResult>(responseJson);
 
@@ -40,7 +39,7 @@ namespace WebUntisSharp {
             wus.Teachers.GetTeachers teachers = new wus.Teachers.GetTeachers() { id = id.ToString() };
             string queryJson = JsonConvert.SerializeObject(teachers);
 
-            string responseJson = SendJsonAndWait(queryJson, Url);
+            string responseJson = SendJsonAndWait(queryJson, _url);
             wus.Teachers.TeachersResult teacherResult = JsonConvert.DeserializeObject<wus.Teachers.TeachersResult>(responseJson);
 
             List<wus.Teachers.Teacher> result = new List<wus.Teachers.Teacher>(teacherResult.result);

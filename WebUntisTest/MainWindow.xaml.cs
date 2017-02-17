@@ -9,7 +9,7 @@ namespace WebUntisTest {
         public MainWindow() {
             InitializeComponent();
 
-            WebUnits untis = new WebUnits("mrousavy", "123", "stpl.tgm.ac.at", "ANDROID");
+            WebUnits untis = new WebUnits("mrousavy", "123", "", "mrousavy");
         }
     }
 }

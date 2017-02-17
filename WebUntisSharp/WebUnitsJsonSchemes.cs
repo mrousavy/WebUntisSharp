@@ -41,7 +41,6 @@ namespace WebUntisSharp {
                 public Params @params;
 
                 public class Params {
-                    public string school;
                     public string user = "ANDROID";
                     public string password;
                     public string client;
