@@ -19,7 +19,7 @@ namespace WebUntisSharp {
             _school = school;
 
             Authentication auth = new Authentication {
-                @params = new Authentication.Params() {
+                @params = new Authentication.Params {
                     client = client,
                     password = password,
                     school = school,
