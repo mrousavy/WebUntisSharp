@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using WebUntisSharp.WebUnitsJsonSchemes.Classes;
+using WebUntisSharp.WebUnitsJsonSchemes.Departments;
+using WebUntisSharp.WebUnitsJsonSchemes.Holidays;
 using WebUntisSharp.WebUnitsJsonSchemes.Rooms;
 using WebUntisSharp.WebUnitsJsonSchemes.Sessions;
 using WebUntisSharp.WebUnitsJsonSchemes.Students;
@@ -189,6 +191,50 @@ namespace WebUntisSharp {
 
             //Return all the Students
             return new List<Room>(result.result);
+        }
+
+        /// <summary>
+        /// Get a List of all Departments
+        /// </summary>
+        /// <returns>The <see cref="List{Department}"/> of all returned Departments.</returns>
+        public List<Department> GetDepartments() {
+            //Get the JSON
+            GetDepartments department = new GetDepartments();
+
+            //Send and receive JSON from WebUntis
+            string requestJson = JsonConvert.SerializeObject(department);
+            string responseJson = SendJsonAndWait(requestJson, _url);
+
+            //Parse JSON to Class
+            DepartmentsResult result = JsonConvert.DeserializeObject<DepartmentsResult>(responseJson);
+
+            if(wus.LastError.Message != null)
+                throw new Exception(wus.LastError.Message);
+
+            //Return all the Students
+            return new List<Department>(result.result);
+        }
+
+        /// <summary>
+        /// Get a List of all Holidays
+        /// </summary>
+        /// <returns>The <see cref="List{Holiday}"/> of all returned Holidays.</returns>
+        public List<Holiday> GetHolidays() {
+            //Get the JSON
+            GetHolidays holidays = new GetHolidays();
+
+            //Send and receive JSON from WebUntis
+            string requestJson = JsonConvert.SerializeObject(holidays);
+            string responseJson = SendJsonAndWait(requestJson, _url);
+
+            //Parse JSON to Class
+            HolidaysResult result = JsonConvert.DeserializeObject<HolidaysResult>(responseJson);
+
+            if(wus.LastError.Message != null)
+                throw new Exception(wus.LastError.Message);
+
+            //Return all the Students
+            return new List<Holiday>(result.result);
         }
 
         #region Private Methods
