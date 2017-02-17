@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using WebUntisSharp;
 
 namespace WebUntisTest {
@@ -6,10 +7,23 @@ namespace WebUntisTest {
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window {
+        private WebUntis _untis;
+
         public MainWindow() {
             InitializeComponent();
 
-            WebUnits untis = new WebUnits("mrousavy", "123", "", "mrousavy");
+        }
+
+        private void Ok_Click(object sender, RoutedEventArgs e) {
+            try {
+                _untis = new WebUntis(UsernameBox.Text, PasswordBox.Password, SchoolUrlBox.Text, "WebUntisSharp API");
+
+                if(WebUntisSharp.WebUnitsJsonSchemes.LastError.Message != null) {
+                    MessageBox.Show(WebUntisSharp.WebUnitsJsonSchemes.LastError.Message);
+                }
+            } catch(Exception ex) {
+                MessageBox.Show(ex.Message);
+            }
         }
     }
 }

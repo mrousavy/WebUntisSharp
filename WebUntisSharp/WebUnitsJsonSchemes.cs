@@ -6,6 +6,13 @@ namespace WebUntisSharp {
     namespace WebUnitsJsonSchemes {
         //Base-Classes/Schemes for Queries and Responses
         #region Special Classes
+
+        //Last occured Error in Web Untis
+        public static class LastError {
+            public static string Message;
+            public static int Code;
+        }
+
         //Base-Class for all Queries
         public class WebUntisQuery {
             public string id;
@@ -19,15 +26,29 @@ namespace WebUntisSharp {
             public object result;
             public readonly string jsonrpc = "2.0";
 
-            public string error {
-                get { return _error; }
+            public Error error;
+        }
+
+        //The general Error class
+        public class Error {
+            public string message {
+                get { return _message; }
                 set {
-                    _error = value;
-                    throw new Exception(error);
+                    _message = value;
+                    LastError.Message = value;
                 }
             }
 
-            private string _error;
+            public int code {
+                get { return _code; }
+                set {
+                    _code = value;
+                    LastError.Code = value;
+                }
+            }
+
+            private string _message;
+            private int _code;
         }
         #endregion
 
@@ -65,7 +86,6 @@ namespace WebUntisSharp {
         namespace Teachers {
             //Get list of teachers
             public class GetTeachers : WebUntisQuery {
-                public new string id;
                 public new readonly string method = "getTeachers";
             }
 
@@ -89,7 +109,6 @@ namespace WebUntisSharp {
         namespace Students {
             //Get list of Students
             public class GetStudents : WebUntisQuery {
-                public new string id;
                 public new readonly string method = "getStudents";
             }
 

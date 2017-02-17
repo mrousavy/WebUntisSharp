@@ -7,6 +7,24 @@
         mc:Ignorable="d"
         Title="WebUntis Test" Height="350" Width="525">
     <Grid>
-        
+    <StackPanel>
+        <DockPanel VerticalAlignment="Top" Margin="20">
+            <Label>School URL:</Label>
+            <TextBox HorizontalAlignment="Stretch" Margin="3"
+                     Name="SchoolUrlBox">https://stpl.tgm.ac.at/WebUntis/jsonrpc.do?school=tgm</TextBox>
+        </DockPanel>
+        <DockPanel VerticalAlignment="Top" Margin="20">
+            <Label>Username</Label>
+            <TextBox HorizontalAlignment="Stretch" Margin="3"
+                     Name="UsernameBox"></TextBox>
+        </DockPanel>
+        <DockPanel VerticalAlignment="Top" Margin="20">
+            <Label>Password</Label>
+            <PasswordBox HorizontalAlignment="Stretch" Margin="3"
+                         Name="PasswordBox"></PasswordBox>
+        </DockPanel>
+    </StackPanel>
+        <Button VerticalAlignment="Bottom" HorizontalAlignment="Right"
+                Margin="10" Width="40" Click="Ok_Click">Ok</Button>
     </Grid>
 </Window>
