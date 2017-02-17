@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using WebUntisSharp.WebUnitsJsonSchemes.Sessions;
+using WebUntisSharp.WebUnitsJsonSchemes.Students;
 using WebUntisSharp.WebUnitsJsonSchemes.Teachers;
 using wus = WebUntisSharp.WebUnitsJsonSchemes;
 
@@ -49,6 +50,7 @@ namespace WebUntisSharp {
             string requestJson = JsonConvert.SerializeObject(auth);
             string responseJson = SendJsonAndWait(requestJson, _url);
 
+            //Parse JSON to Class
             AuthenticationResult result = JsonConvert.DeserializeObject<AuthenticationResult>(responseJson);
 
             if(wus.LastError.Message != null)
@@ -82,12 +84,13 @@ namespace WebUntisSharp {
         /// <returns>The <see cref="List{Teacher}"/> of all returned Teachers.</returns>
         public List<Teacher> GetTeachers() {
             //Get the JSON
-            GetTeachers teacher = new GetTeachers();
+            GetTeachers teachers = new GetTeachers();
 
             //Send and receive JSON from WebUntis
-            string requestJson = JsonConvert.SerializeObject(teacher);
+            string requestJson = JsonConvert.SerializeObject(teachers);
             string responseJson = SendJsonAndWait(requestJson, _url);
 
+            //Parse JSON to Class
             TeachersResult result = JsonConvert.DeserializeObject<TeachersResult>(responseJson);
 
             if(wus.LastError.Message != null)
@@ -97,16 +100,26 @@ namespace WebUntisSharp {
             return new List<Teacher>(result.result);
         }
 
-        //Get List of Teachers
-        public List<wus.Teachers.Teacher> GetTeachers(int id) {
-            wus.Teachers.GetTeachers teachers = new wus.Teachers.GetTeachers() { id = id.ToString() };
-            string queryJson = JsonConvert.SerializeObject(teachers);
+        /// <summary>
+        /// Get a List of all Students
+        /// </summary>
+        /// <returns>The <see cref="List{Student}"/> of all returned Students.</returns>
+        public List<Student> GetStudents() {
+            //Get the JSON
+            GetStudents students = new GetStudents();
 
-            string responseJson = SendJsonAndWait(queryJson, _url);
-            wus.Teachers.TeachersResult teacherResult = JsonConvert.DeserializeObject<wus.Teachers.TeachersResult>(responseJson);
+            //Send and receive JSON from WebUntis
+            string requestJson = JsonConvert.SerializeObject(students);
+            string responseJson = SendJsonAndWait(requestJson, _url);
 
-            List<wus.Teachers.Teacher> result = new List<wus.Teachers.Teacher>(teacherResult.result);
-            return result;
+            //Parse JSON to Class
+            StudentsResult result = JsonConvert.DeserializeObject<StudentsResult>(responseJson);
+
+            if(wus.LastError.Message != null)
+                throw new Exception(wus.LastError.Message);
+
+            //Return all the Students
+            return new List<Student>(result.result);
         }
 
 
