@@ -24,7 +24,9 @@
                          Name="PasswordBox"></PasswordBox>
         </DockPanel>
     </StackPanel>
-        <Button VerticalAlignment="Bottom" HorizontalAlignment="Right"
-                Margin="10" Width="40" Click="Ok_Click">Ok</Button>
+        <StackPanel Orientation="Horizontal"
+                    VerticalAlignment="Bottom" HorizontalAlignment="Right">
+            <Button Margin="10" Width="40" Click="Ok_Click">Ok</Button>
+        </StackPanel>
     </Grid>
 </Window>
