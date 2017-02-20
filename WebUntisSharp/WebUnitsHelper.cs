@@ -7,6 +7,8 @@ using WebUntisSharp.WebUnitsJsonSchemes.Classes;
 using WebUntisSharp.WebUnitsJsonSchemes.CurrentSchoolyear;
 using WebUntisSharp.WebUnitsJsonSchemes.Departments;
 using WebUntisSharp.WebUnitsJsonSchemes.Holidays;
+using WebUntisSharp.WebUnitsJsonSchemes.LastImportTime;
+using WebUntisSharp.WebUnitsJsonSchemes.PersonIdSearch;
 using WebUntisSharp.WebUnitsJsonSchemes.Rooms;
 using WebUntisSharp.WebUnitsJsonSchemes.SchoolYears;
 using WebUntisSharp.WebUnitsJsonSchemes.Sessions;
@@ -362,6 +364,61 @@ namespace WebUntisSharp {
 
             //Return the Timetable for the Element
             return result;
+        }
+
+        /// <summary>
+        /// Get the Last Import Time
+        /// </summary>
+        /// <returns>The returned Import Time</returns>
+        public DateTime GetLastImportTime() {
+            //Get the JSON
+            LastImportTime lastImport = new LastImportTime();
+
+            //Send and receive JSON from WebUntis
+            string requestJson = JsonConvert.SerializeObject(lastImport);
+            string responseJson = SendJsonAndWait(requestJson, _url);
+
+            //Parse JSON to Class
+            LastImportTimeResult result = JsonConvert.DeserializeObject<LastImportTimeResult>(responseJson);
+
+            if(wus.LastError.Message != null)
+                throw new Exception(wus.LastError.Message);
+
+            //Return the Last Imported Time (DateTime)
+            return result.result;
+        }
+
+        /// <summary>
+        /// Get the ID of a Person by Parameters
+        /// </summary>
+        /// <param name="personType">The Type of Person | 2 = Teacher, 5 = Student</param>
+        /// <param name="surname">The Surname of the Person to query</param>
+        /// <param name="forename">The Forename of the Person to query</param>
+        /// <param name="birthdata">The Birthdata of the Person (Default is 0)</param>
+        /// <returns>The Person's ID</returns>
+        public int GetPersonId(int personType, string surname, string forename, int birthdata = 0) {
+            //Get the JSON
+            SearchPersonId personId = new SearchPersonId {
+                @params = new SearchPersonId.Params() {
+                    dob = birthdata,
+                    fn = forename,
+                    sn = surname,
+                    type = personType
+                }
+            };
+
+            //Send and receive JSON from WebUntis
+            string requestJson = JsonConvert.SerializeObject(personId);
+            string responseJson = SendJsonAndWait(requestJson, _url);
+
+            //Parse JSON to Class
+            SearchPersonIdResult result = JsonConvert.DeserializeObject<SearchPersonIdResult>(responseJson);
+
+            if(wus.LastError.Message != null)
+                throw new Exception(wus.LastError.Message);
+
+            //Return the Person ID
+            return result.result;
         }
 
         #region Private Methods
