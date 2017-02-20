@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
+using System.Threading.Tasks;
 using WebUntisSharp.WebUnitsJsonSchemes.Classes;
 using WebUntisSharp.WebUnitsJsonSchemes.ClassregEvents;
 using WebUntisSharp.WebUnitsJsonSchemes.CurrentSchoolyear;
@@ -52,44 +53,20 @@ namespace WebUntisSharp {
         public WebUntis(string user, string password, string schoolUrl, string client) {
             _url = schoolUrl;
 
-            //Login to WebUntis
-            //Get the JSON
-            Authentication auth = new Authentication {
-                id = "2",
-                @params = new Authentication.Params {
-                    user = user,
-                    password = password,
-                    client = client
-                }
-            };
-
-            //Send and receive JSON from WebUntis
-            string requestJson = JsonConvert.SerializeObject(auth);
-            string responseJson = SendJsonAndWait(requestJson, _url);
-
-            //Parse JSON to Class
-            AuthenticationResult result = JsonConvert.DeserializeObject<AuthenticationResult>(responseJson);
-
-            if(!SuppressErrors && wus.LastError.Message != null)
-                throw new Exception(wus.LastError.Message);
-
-            //Get Session ID
-            SessionId = result.result.sessionId;
+            Login(user, password, client);
         }
 
         /// <summary>
         /// Logout/End the current Session.
         /// An application should always logout as soon as possible to free system resources on the server
         /// </summary>
-        public void Logout() {
+        public async void Logout() {
             //Get the JSON
-            Logout logout = new Logout {
-                id = SessionId
-            };
+            Logout logout = new Logout();
 
             //Send JSON to WebUntis
             string requestJson = JsonConvert.SerializeObject(logout);
-            SendJson(requestJson, _url);
+            await SendJson(requestJson, _url, SessionId);
 
             if(!SuppressErrors && wus.LastError.Message != null)
                 throw new Exception(wus.LastError.Message);
@@ -99,13 +76,13 @@ namespace WebUntisSharp {
         /// Get a List of all Teachers
         /// </summary>
         /// <returns>The <see cref="List{Teacher}"/> of all returned Teachers.</returns>
-        public List<Teacher> GetTeachers() {
+        public async Task<List<Teacher>> GetTeachers() {
             //Get the JSON
             GetTeachers teachers = new GetTeachers();
 
             //Send and receive JSON from WebUntis
             string requestJson = JsonConvert.SerializeObject(teachers);
-            string responseJson = SendJsonAndWait(requestJson, _url);
+            string responseJson = await SendJsonAndWait(requestJson, _url, SessionId);
 
             //Parse JSON to Class
             TeachersResult result = JsonConvert.DeserializeObject<TeachersResult>(responseJson);
@@ -121,13 +98,13 @@ namespace WebUntisSharp {
         /// Get a List of all Students
         /// </summary>
         /// <returns>The <see cref="List{Student}"/> of all returned Students.</returns>
-        public List<Student> GetStudents() {
+        public async Task<List<Student>> GetStudents() {
             //Get the JSON
             GetStudents students = new GetStudents();
 
             //Send and receive JSON from WebUntis
             string requestJson = JsonConvert.SerializeObject(students);
-            string responseJson = SendJsonAndWait(requestJson, _url);
+            string responseJson = await SendJsonAndWait(requestJson, _url, SessionId);
 
             //Parse JSON to Class
             StudentsResult result = JsonConvert.DeserializeObject<StudentsResult>(responseJson);
@@ -143,13 +120,13 @@ namespace WebUntisSharp {
         /// Get a List of all Classes
         /// </summary>
         /// <returns>The <see cref="List{Class}"/> of all returned Classes.</returns>
-        public List<Class> GetClasses() {
+        public async Task<List<Class>> GetClasses() {
             //Get the JSON
             GetClasses classes = new GetClasses();
 
             //Send and receive JSON from WebUntis
             string requestJson = JsonConvert.SerializeObject(classes);
-            string responseJson = SendJsonAndWait(requestJson, _url);
+            string responseJson = await SendJsonAndWait(requestJson, _url, SessionId);
 
             //Parse JSON to Class
             ClassesResult result = JsonConvert.DeserializeObject<ClassesResult>(responseJson);
@@ -165,13 +142,13 @@ namespace WebUntisSharp {
         /// Get a List of all Subjects
         /// </summary>
         /// <returns>The <see cref="List{Subject}"/> of all returned Subjects.</returns>
-        public List<Subject> GetSubjects() {
+        public async Task<List<Subject>> GetSubjects() {
             //Get the JSON
             GetSubjects subjects = new GetSubjects();
 
             //Send and receive JSON from WebUntis
             string requestJson = JsonConvert.SerializeObject(subjects);
-            string responseJson = SendJsonAndWait(requestJson, _url);
+            string responseJson = await SendJsonAndWait(requestJson, _url, SessionId);
 
             //Parse JSON to Class
             SubjectsResult result = JsonConvert.DeserializeObject<SubjectsResult>(responseJson);
@@ -187,13 +164,13 @@ namespace WebUntisSharp {
         /// Get a List of all Rooms
         /// </summary>
         /// <returns>The <see cref="List{Room}"/> of all returned Rooms.</returns>
-        public List<Room> GetRooms() {
+        public async Task<List<Room>> GetRooms() {
             //Get the JSON
             GetRooms rooms = new GetRooms();
 
             //Send and receive JSON from WebUntis
             string requestJson = JsonConvert.SerializeObject(rooms);
-            string responseJson = SendJsonAndWait(requestJson, _url);
+            string responseJson = await SendJsonAndWait(requestJson, _url, SessionId);
 
             //Parse JSON to Class
             RoomsResult result = JsonConvert.DeserializeObject<RoomsResult>(responseJson);
@@ -209,13 +186,13 @@ namespace WebUntisSharp {
         /// Get a List of all Departments
         /// </summary>
         /// <returns>The <see cref="List{Department}"/> of all returned Departments.</returns>
-        public List<Department> GetDepartments() {
+        public async Task<List<Department>> GetDepartments() {
             //Get the JSON
             GetDepartments department = new GetDepartments();
 
             //Send and receive JSON from WebUntis
             string requestJson = JsonConvert.SerializeObject(department);
-            string responseJson = SendJsonAndWait(requestJson, _url);
+            string responseJson = await SendJsonAndWait(requestJson, _url, SessionId);
 
             //Parse JSON to Class
             DepartmentsResult result = JsonConvert.DeserializeObject<DepartmentsResult>(responseJson);
@@ -231,13 +208,13 @@ namespace WebUntisSharp {
         /// Get a List of all Holidays
         /// </summary>
         /// <returns>The <see cref="List{Holiday}"/> of all returned Holidays.</returns>
-        public List<Holiday> GetHolidays() {
+        public async Task<List<Holiday>> GetHolidays() {
             //Get the JSON
             GetHolidays holidays = new GetHolidays();
 
             //Send and receive JSON from WebUntis
             string requestJson = JsonConvert.SerializeObject(holidays);
-            string responseJson = SendJsonAndWait(requestJson, _url);
+            string responseJson = await SendJsonAndWait(requestJson, _url, SessionId);
 
             //Parse JSON to Class
             HolidaysResult result = JsonConvert.DeserializeObject<HolidaysResult>(responseJson);
@@ -253,13 +230,13 @@ namespace WebUntisSharp {
         /// Get the Timegrid
         /// </summary>
         /// <returns>The returned Timegrid</returns>
-        public Timegrid GetTimegrid() {
+        public async Task<Timegrid> GetTimegrid() {
             //Get the JSON
             GetTimegrid timegrid = new GetTimegrid();
 
             //Send and receive JSON from WebUntis
             string requestJson = JsonConvert.SerializeObject(timegrid);
-            string responseJson = SendJsonAndWait(requestJson, _url);
+            string responseJson = await SendJsonAndWait(requestJson, _url, SessionId);
 
             //Parse JSON to Class
             Timegrid result = JsonConvert.DeserializeObject<Timegrid>(responseJson);
@@ -275,13 +252,13 @@ namespace WebUntisSharp {
         /// Get the StatusData
         /// </summary>
         /// <returns>The returned StatusData</returns>
-        public StatusData GetStatusData() {
+        public async Task<StatusData> GetStatusData() {
             //Get the JSON
             GetStatusData statusData = new GetStatusData();
 
             //Send and receive JSON from WebUntis
             string requestJson = JsonConvert.SerializeObject(statusData);
-            string responseJson = SendJsonAndWait(requestJson, _url);
+            string responseJson = await SendJsonAndWait(requestJson, _url, SessionId);
 
             //Parse JSON to Class
             StatusData result = JsonConvert.DeserializeObject<StatusData>(responseJson);
@@ -297,13 +274,13 @@ namespace WebUntisSharp {
         /// Get the Current Schoolyear
         /// </summary>
         /// <returns>The current Schoolyear</returns>
-        public Schoolyear GetSchoolyear() {
+        public async Task<Schoolyear> GetSchoolyear() {
             //Get the JSON
             CurrentSchoolyear schoolyear = new CurrentSchoolyear();
 
             //Send and receive JSON from WebUntis
             string requestJson = JsonConvert.SerializeObject(schoolyear);
-            string responseJson = SendJsonAndWait(requestJson, _url);
+            string responseJson = await SendJsonAndWait(requestJson, _url, SessionId);
 
             //Parse JSON to Class
             Schoolyear result = JsonConvert.DeserializeObject<Schoolyear>(responseJson);
@@ -319,13 +296,13 @@ namespace WebUntisSharp {
         /// Get all Schoolyears
         /// </summary>
         /// <returns>The returned Schoolyears</returns>
-        public List<Schoolyear> GetSchoolyears() {
+        public async Task<List<Schoolyear>> GetSchoolyears() {
             //Get the JSON
             Schoolyears schoolyears = new Schoolyears();
 
             //Send and receive JSON from WebUntis
             string requestJson = JsonConvert.SerializeObject(schoolyears);
-            string responseJson = SendJsonAndWait(requestJson, _url);
+            string responseJson = await SendJsonAndWait(requestJson, _url, SessionId);
 
             //Parse JSON to Class
             wus.SchoolYears.SchoolyearResult result = JsonConvert.DeserializeObject<wus.SchoolYears.SchoolyearResult>(responseJson);
@@ -345,7 +322,7 @@ namespace WebUntisSharp {
         /// <param name="startDate">The Start Date of the Timetable</param>
         /// <param name="endDate">The End Date of the Timetable</param>
         /// <returns>The returned Timetable</returns>
-        public TimetableResult GetTimetableForElement(int elementId, int elementType, long startDate, long endDate) {
+        public async Task<TimetableResult> GetTimetableForElement(int elementId, int elementType, long startDate, long endDate) {
             //Get the JSON
             TimetableForElement timetable = new TimetableForElement() {
                 @params = new TimetableForElement.Params() {
@@ -358,7 +335,7 @@ namespace WebUntisSharp {
 
             //Send and receive JSON from WebUntis
             string requestJson = JsonConvert.SerializeObject(timetable);
-            string responseJson = SendJsonAndWait(requestJson, _url);
+            string responseJson = await SendJsonAndWait(requestJson, _url, SessionId);
 
             //Parse JSON to Class
             TimetableResult result = JsonConvert.DeserializeObject<TimetableResult>(responseJson);
@@ -374,13 +351,13 @@ namespace WebUntisSharp {
         /// Get the Last Import Time
         /// </summary>
         /// <returns>The returned Import Time</returns>
-        public DateTime GetLastImportTime() {
+        public async Task<DateTime> GetLastImportTime() {
             //Get the JSON
             LastImportTime lastImport = new LastImportTime();
 
             //Send and receive JSON from WebUntis
             string requestJson = JsonConvert.SerializeObject(lastImport);
-            string responseJson = SendJsonAndWait(requestJson, _url);
+            string responseJson = await SendJsonAndWait(requestJson, _url, SessionId);
 
             //Parse JSON to Class
             LastImportTimeResult result = JsonConvert.DeserializeObject<LastImportTimeResult>(responseJson);
@@ -400,7 +377,7 @@ namespace WebUntisSharp {
         /// <param name="forename">The Forename of the Person to query</param>
         /// <param name="birthdata">The Birthdata of the Person (Default is 0)</param>
         /// <returns>The Person's ID</returns>
-        public int GetPersonId(int personType, string surname, string forename, int birthdata = 0) {
+        public async Task<int> GetPersonId(int personType, string surname, string forename, int birthdata = 0) {
             //Get the JSON
             SearchPersonId personId = new SearchPersonId {
                 @params = new SearchPersonId.Params() {
@@ -413,7 +390,7 @@ namespace WebUntisSharp {
 
             //Send and receive JSON from WebUntis
             string requestJson = JsonConvert.SerializeObject(personId);
-            string responseJson = SendJsonAndWait(requestJson, _url);
+            string responseJson = await SendJsonAndWait(requestJson, _url, SessionId);
 
             //Parse JSON to Class
             SearchPersonIdResult result = JsonConvert.DeserializeObject<SearchPersonIdResult>(responseJson);
@@ -432,7 +409,7 @@ namespace WebUntisSharp {
         /// <param name="endDate">The End Date of the Substitutions to filter</param>
         /// <param name="departmentId">The ID of the Department (default = 0)</param>
         /// <returns>The Substitution(s)</returns>
-        public Substitution[] GetSubstitution(long startDate, long endDate, int departmentId = 0) {
+        public async Task<Substitution[]> GetSubstitution(long startDate, long endDate, int departmentId = 0) {
             //Get the JSON
             Substitutions substitutions = new Substitutions {
                 @params = new Substitutions.Params {
@@ -444,7 +421,7 @@ namespace WebUntisSharp {
 
             //Send and receive JSON from WebUntis
             string requestJson = JsonConvert.SerializeObject(substitutions);
-            string responseJson = SendJsonAndWait(requestJson, _url);
+            string responseJson = await SendJsonAndWait(requestJson, _url, SessionId);
 
             //Parse JSON to Class
             SubstitutionResult result = JsonConvert.DeserializeObject<SubstitutionResult>(responseJson);
@@ -462,7 +439,7 @@ namespace WebUntisSharp {
         /// <param name="startDate">The Begin Date of the ClassregEvents to filter</param>
         /// <param name="endDate">The End Date of the ClassregEvents to filter</param>
         /// <returns>The Events(s)</returns>
-        public Event[] GetClassRegEvents(long startDate, long endDate) {
+        public async Task<Event[]> GetClassRegEvents(long startDate, long endDate) {
             //Get the JSON
             ClassregEvents classreg = new ClassregEvents {
                 @params = new ClassregEvents.Params {
@@ -473,7 +450,7 @@ namespace WebUntisSharp {
 
             //Send and receive JSON from WebUntis
             string requestJson = JsonConvert.SerializeObject(classreg);
-            string responseJson = SendJsonAndWait(requestJson, _url);
+            string responseJson = await SendJsonAndWait(requestJson, _url, SessionId);
 
             //Parse JSON to Class
             ClassregEventsResult result = JsonConvert.DeserializeObject<ClassregEventsResult>(responseJson);
@@ -492,7 +469,7 @@ namespace WebUntisSharp {
         /// <param name="endDate">The End Date of the ClassregEvents to filter</param>
         /// <param name="examTypeId">The Exam Type ID</param>
         /// <returns>The Exam(s)</returns>
-        public Exam[] GetExams(long startDate, long endDate, int examTypeId) {
+        public async Task<Exam[]> GetExams(long startDate, long endDate, int examTypeId) {
             //Get the JSON
             RequestExams requestExams = new RequestExams {
                 @params = new RequestExams.Params {
@@ -504,7 +481,7 @@ namespace WebUntisSharp {
 
             //Send and receive JSON from WebUntis
             string requestJson = JsonConvert.SerializeObject(requestExams);
-            string responseJson = SendJsonAndWait(requestJson, _url);
+            string responseJson = await SendJsonAndWait(requestJson, _url, SessionId);
 
             //Parse JSON to Class
             ExamResult result = JsonConvert.DeserializeObject<ExamResult>(responseJson);
@@ -543,20 +520,73 @@ namespace WebUntisSharp {
 
         #region Private Methods
         //Send JSON
-        private static void SendJson(string json, string url) {
+        private async static Task SendJson(string json, string url, string sessionId) {
             HttpWebRequest httpWebRequest = (HttpWebRequest)WebRequest.Create(url);
             httpWebRequest.ContentType = "application/json";
             httpWebRequest.Method = "POST";
 
-            using(StreamWriter streamWriter = new StreamWriter(httpWebRequest.GetRequestStream())) {
-                streamWriter.Write(json);
+            using(StreamWriter streamWriter = new StreamWriter(await httpWebRequest.GetRequestStreamAsync())) {
+                await streamWriter.WriteAsync(json);
                 streamWriter.Flush();
                 streamWriter.Close();
             }
         }
 
+        //Log user in
+        private void Login(string user, string password, string client) {
+            //Login to WebUntis
+            //Get the JSON
+            Authentication auth = new Authentication {
+                @params = new Authentication.Params {
+                    user = user,
+                    password = password,
+                    client = client
+                }
+            };
+
+            //Send and receive JSON from WebUntis
+            string requestJson = JsonConvert.SerializeObject(auth);
+            string responseJson = SendJsonAndWaitSynchronous(requestJson, _url, SessionId);
+
+            //Parse JSON to Class
+            AuthenticationResult result = JsonConvert.DeserializeObject<AuthenticationResult>(responseJson);
+
+            if(!SuppressErrors && wus.LastError.Message != null)
+                throw new Exception(wus.LastError.Message);
+
+            //Get Session ID
+            SessionId = result.result.sessionId;
+        }
+
         //Send JSON and wait for response
-        private static string SendJsonAndWait(string json, string url) {
+        private async static Task<string> SendJsonAndWait(string json, string url, string sessionId) {
+            string result;
+
+            HttpWebRequest httpWebRequest = (HttpWebRequest)WebRequest.Create(url);
+            httpWebRequest.ContentType = "application/json";
+            httpWebRequest.Method = "POST";
+
+            using(StreamWriter streamWriter = new StreamWriter(await httpWebRequest.GetRequestStreamAsync())) {
+                await streamWriter.WriteAsync(json);
+                streamWriter.Flush();
+                streamWriter.Close();
+            }
+
+            HttpWebResponse httpResponse = (HttpWebResponse)await httpWebRequest.GetResponseAsync();
+            Stream responseStream = httpResponse.GetResponseStream();
+            if(responseStream == null)
+                throw new Exception("Response Stream was null!");
+
+            using(StreamReader streamReader = new StreamReader(responseStream)) {
+                result = await streamReader.ReadToEndAsync();
+            }
+
+            return result;
+        }
+
+
+        //Send JSON and wait for response
+        private static string SendJsonAndWaitSynchronous(string json, string url, string sessionId) {
             string result;
 
             HttpWebRequest httpWebRequest = (HttpWebRequest)WebRequest.Create(url);

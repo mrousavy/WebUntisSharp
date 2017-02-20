@@ -9,8 +9,30 @@ namespace WebUntisSharp {
 
         //Last occured Error in Web Untis
         public static class LastError {
-            public static string Message;
-            public static int Code;
+            public static string Message {
+                get {
+                    string ret = _message;
+                    _message = null;
+                    return ret;
+                }
+                set {
+                    _message = value;
+                }
+            }
+
+            public static int Code {
+                get {
+                    int ret = _code;
+                    _code = 0;
+                    return ret;
+                }
+                set {
+                    _code = value;
+                }
+            }
+
+            private static string _message;
+            private static int _code;
         }
 
         //Base-Class for all Queries
@@ -58,6 +80,7 @@ namespace WebUntisSharp {
         namespace Sessions {
             //Authenticate the given user and start a session
             public class Authentication : WebUntisQuery {
+                public new string id = "1";
                 public new readonly string method = "authenticate";
                 public Params @params;
 
@@ -82,7 +105,7 @@ namespace WebUntisSharp {
 
             //End the session
             public class Logout : WebUntisQuery {
-                public new string id;
+                public new string id = "2";
                 public new readonly string method = "logout";
             }
         }
@@ -91,6 +114,7 @@ namespace WebUntisSharp {
         namespace Teachers {
             //Get list of teachers
             public class GetTeachers : WebUntisQuery {
+                public new string id = "3";
                 public new readonly string method = "getTeachers";
             }
 
@@ -114,6 +138,7 @@ namespace WebUntisSharp {
         namespace Students {
             //Get list of Students
             public class GetStudents : WebUntisQuery {
+                public new string id = "4";
                 public new readonly string method = "getStudents";
             }
 
@@ -138,6 +163,7 @@ namespace WebUntisSharp {
         namespace Classes {
             //Get Classes (Klassen) for schoolyear
             public class GetClasses : WebUntisQuery {
+                public new string id = "5";
                 public new readonly string method = "getKlassen";
                 public Params @params;
 
@@ -166,6 +192,7 @@ namespace WebUntisSharp {
         namespace Subjects {
             //Get List of Subjects
             public class GetSubjects : WebUntisQuery {
+                public new string id = "6";
                 public new string method = "getSubjects";
             }
 
@@ -188,6 +215,7 @@ namespace WebUntisSharp {
         namespace Rooms {
             //Get List of Rooms
             public class GetRooms : WebUntisQuery {
+                public new string id = "7";
                 public new string method = "getRooms";
             }
 
@@ -210,6 +238,7 @@ namespace WebUntisSharp {
         namespace Departments {
             //Get List of Departments
             public class GetDepartments : WebUntisQuery {
+                public new string id = "8";
                 public new string method = "getDepartments";
             }
 
@@ -230,6 +259,7 @@ namespace WebUntisSharp {
         namespace Holidays {
             //Get List of Holidays
             public class GetHolidays : WebUntisQuery {
+                public new string id = "9";
                 public new string method = "getHolidays";
             }
 
@@ -252,6 +282,7 @@ namespace WebUntisSharp {
         namespace Timegrid {
             //Get List of Timegrids
             public class GetTimegrid : WebUntisQuery {
+                public new string id = "10";
                 public new string method = "getTimegridUnits";
             }
 
@@ -278,6 +309,7 @@ namespace WebUntisSharp {
         namespace StatusData {
             //Request Status Data
             public class GetStatusData : WebUntisQuery {
+                public new string id = "11";
                 public new string method = "getStatusData";
             }
 
@@ -297,6 +329,7 @@ namespace WebUntisSharp {
         namespace CurrentSchoolyear {
             //Get Data for the current schoolyear
             public class CurrentSchoolyear : WebUntisQuery {
+                public new string id = "12";
                 public new readonly string method = "getCurrentSchoolyear";
             }
 
@@ -318,6 +351,7 @@ namespace WebUntisSharp {
         namespace SchoolYears {
             //Get Data for the schoolyears
             public class Schoolyears : WebUntisQuery {
+                public new string id = "13";
                 public new readonly string method = "getSchoolyears";
             }
 
@@ -331,6 +365,7 @@ namespace WebUntisSharp {
         namespace TimetableForElement {
             //Get Timetable for element
             public class TimetableForElement : WebUntisQuery {
+                public new string id = "14";
                 public new readonly string method = "getTimetable";
                 public Params @params;
 
@@ -394,6 +429,7 @@ namespace WebUntisSharp {
         namespace LastImportTime {
             //Get last import time
             public class LastImportTime : WebUntisQuery {
+                public new string id = "17";
                 public new readonly string method = "getLatestImportTime";
             }
 
@@ -407,6 +443,7 @@ namespace WebUntisSharp {
         namespace PersonIdSearch {
             //Get Id of the person (teacher or student) from the name
             public class SearchPersonId : WebUntisQuery {
+                public new string id = "18";
                 public new readonly string method = "getPersonId";
                 public Params @params;
 
@@ -432,6 +469,7 @@ namespace WebUntisSharp {
         namespace Substitutions {
             //Request substitutions for the given date range
             public class Substitutions : WebUntisQuery {
+                public new string id = "19";
                 public new readonly string method = "getSubstitutions";
                 public Params @params;
 
@@ -481,6 +519,7 @@ namespace WebUntisSharp {
         namespace ClassregEvents {
             //Request classregevents for the given date range
             public class ClassregEvents : WebUntisQuery {
+                public new string id = "20";
                 public new readonly string method = "getClassregEvents";
                 public Params @params;
 
@@ -510,6 +549,7 @@ namespace WebUntisSharp {
         namespace Exams {
             //Request Exams
             public class RequestExams : WebUntisQuery {
+                public new string id = "21";
                 public new readonly string method = "getExams";
                 public Params @params;
 
@@ -542,6 +582,7 @@ namespace WebUntisSharp {
         namespace ExamTypes {
             //Request Exam Types
             public class ExamTypes : WebUntisQuery {
+                public new string id = "22";
                 public new readonly string method = "getExamTypes";
             }
         }
