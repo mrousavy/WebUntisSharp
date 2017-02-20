@@ -456,7 +456,6 @@ namespace WebUntisSharp {
             return result.result;
         }
 
-
         /// <summary>
         /// Get ClassregEvents
         /// </summary>
@@ -541,6 +540,7 @@ namespace WebUntisSharp {
             //Return the Exams(s)
             return result.result;
         }
+
 
         #region Private Methods
         //Send JSON
