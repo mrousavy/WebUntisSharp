@@ -8,7 +8,6 @@ using WebUntisSharp.WebUnitsJsonSchemes.ClassregEvents;
 using WebUntisSharp.WebUnitsJsonSchemes.CurrentSchoolyear;
 using WebUntisSharp.WebUnitsJsonSchemes.Departments;
 using WebUntisSharp.WebUnitsJsonSchemes.Exams;
-using WebUntisSharp.WebUnitsJsonSchemes.ExamTypes;
 using WebUntisSharp.WebUnitsJsonSchemes.Holidays;
 using WebUntisSharp.WebUnitsJsonSchemes.LastImportTime;
 using WebUntisSharp.WebUnitsJsonSchemes.PersonIdSearch;
@@ -524,23 +523,22 @@ namespace WebUntisSharp {
         public Exam[] GetExamTypes() {
             throw new NotImplementedException();
 
-            //Get the JSON
-            ExamTypes requestExams = new ExamTypes();
+            ////Get the JSON
+            //ExamTypes requestExams = new ExamTypes();
 
-            //Send and receive JSON from WebUntis
-            string requestJson = JsonConvert.SerializeObject(requestExams);
-            string responseJson = SendJsonAndWait(requestJson, _url);
+            ////Send and receive JSON from WebUntis
+            //string requestJson = JsonConvert.SerializeObject(requestExams);
+            //string responseJson = SendJsonAndWait(requestJson, _url);
 
-            //Parse JSON to Class
-            ExamResult result = JsonConvert.DeserializeObject<ExamResult>(responseJson);
+            ////Parse JSON to Class
+            //ExamResult result = JsonConvert.DeserializeObject<ExamResult>(responseJson);
 
-            if(wus.LastError.Message != null)
-                throw new Exception(wus.LastError.Message);
+            //if(wus.LastError.Message != null)
+            //    throw new Exception(wus.LastError.Message);
 
-            //Return the Exams(s)
-            return result.result;
+            ////Return the Exams Types(s)
+            //return result.result;
         }
-
 
         #region Private Methods
         //Send JSON
@@ -571,7 +569,11 @@ namespace WebUntisSharp {
             }
 
             HttpWebResponse httpResponse = (HttpWebResponse)httpWebRequest.GetResponse();
-            using(StreamReader streamReader = new StreamReader(httpResponse.GetResponseStream())) {
+            Stream responseStream = httpResponse.GetResponseStream();
+            if(responseStream == null)
+                throw new Exception("Response Stream was null!");
+
+            using(StreamReader streamReader = new StreamReader(responseStream)) {
                 result = streamReader.ReadToEnd();
             }
 
