@@ -70,9 +70,14 @@ namespace WebUntisSharp {
 
             //Result of Authentication
             public class AuthenticationResult : WebUntisResult {
-                public string sessionId;
-                public int personType;
-                public int personId;
+                public new Result result;
+
+                public class Result {
+                    public string sessionId;
+                    public int personType;
+                    public int personId;
+                    public int klasseId;
+                }
             }
 
             //End the session
