@@ -4,8 +4,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using WebUntisSharp.WebUnitsJsonSchemes.Classes;
+using WebUntisSharp.WebUnitsJsonSchemes.ClassregEvents;
 using WebUntisSharp.WebUnitsJsonSchemes.CurrentSchoolyear;
 using WebUntisSharp.WebUnitsJsonSchemes.Departments;
+using WebUntisSharp.WebUnitsJsonSchemes.Exams;
+using WebUntisSharp.WebUnitsJsonSchemes.ExamTypes;
 using WebUntisSharp.WebUnitsJsonSchemes.Holidays;
 using WebUntisSharp.WebUnitsJsonSchemes.LastImportTime;
 using WebUntisSharp.WebUnitsJsonSchemes.PersonIdSearch;
@@ -15,6 +18,7 @@ using WebUntisSharp.WebUnitsJsonSchemes.Sessions;
 using WebUntisSharp.WebUnitsJsonSchemes.StatusData;
 using WebUntisSharp.WebUnitsJsonSchemes.Students;
 using WebUntisSharp.WebUnitsJsonSchemes.Subjects;
+using WebUntisSharp.WebUnitsJsonSchemes.Substitutions;
 using WebUntisSharp.WebUnitsJsonSchemes.Teachers;
 using WebUntisSharp.WebUnitsJsonSchemes.Timegrid;
 using WebUntisSharp.WebUnitsJsonSchemes.TimetableForElement;
@@ -418,6 +422,123 @@ namespace WebUntisSharp {
                 throw new Exception(wus.LastError.Message);
 
             //Return the Person ID
+            return result.result;
+        }
+
+        /// <summary>
+        /// Get Substitutions
+        /// </summary>
+        /// <param name="startDate">The Begin Date of the Substitutions to filter</param>
+        /// <param name="endDate">The End Date of the Substitutions to filter</param>
+        /// <param name="departmentId">The ID of the Department (default = 0)</param>
+        /// <returns>The Substitution(s)</returns>
+        public Substitution[] GetSubstitution(long startDate, long endDate, int departmentId = 0) {
+            //Get the JSON
+            Substitutions substitutions = new Substitutions {
+                @params = new Substitutions.Params {
+                    startDate = startDate,
+                    endDate = endDate,
+                    departmentId = departmentId
+                }
+            };
+
+            //Send and receive JSON from WebUntis
+            string requestJson = JsonConvert.SerializeObject(substitutions);
+            string responseJson = SendJsonAndWait(requestJson, _url);
+
+            //Parse JSON to Class
+            SubstitutionResult result = JsonConvert.DeserializeObject<SubstitutionResult>(responseJson);
+
+            if(wus.LastError.Message != null)
+                throw new Exception(wus.LastError.Message);
+
+            //Return the Substitutions
+            return result.result;
+        }
+
+
+        /// <summary>
+        /// Get ClassregEvents
+        /// </summary>
+        /// <param name="startDate">The Begin Date of the ClassregEvents to filter</param>
+        /// <param name="endDate">The End Date of the ClassregEvents to filter</param>
+        /// <returns>The Events(s)</returns>
+        public Event[] GetClassRegEvents(long startDate, long endDate) {
+            //Get the JSON
+            ClassregEvents classreg = new ClassregEvents {
+                @params = new ClassregEvents.Params {
+                    startDate = startDate,
+                    endDate = endDate
+                }
+            };
+
+            //Send and receive JSON from WebUntis
+            string requestJson = JsonConvert.SerializeObject(classreg);
+            string responseJson = SendJsonAndWait(requestJson, _url);
+
+            //Parse JSON to Class
+            ClassregEventsResult result = JsonConvert.DeserializeObject<ClassregEventsResult>(responseJson);
+
+            if(wus.LastError.Message != null)
+                throw new Exception(wus.LastError.Message);
+
+            //Return the ClassregEvent(s)
+            return result.result;
+        }
+
+        /// <summary>
+        /// Get ClassregEvents
+        /// </summary>
+        /// <param name="startDate">The Begin Date of the ClassregEvents to filter</param>
+        /// <param name="endDate">The End Date of the ClassregEvents to filter</param>
+        /// <param name="examTypeId">The Exam Type ID</param>
+        /// <returns>The Exam(s)</returns>
+        public Exam[] GetExams(long startDate, long endDate, int examTypeId) {
+            //Get the JSON
+            RequestExams requestExams = new RequestExams {
+                @params = new RequestExams.Params {
+                    startDate = startDate,
+                    endDate = endDate,
+                    examTypeId = examTypeId
+                }
+            };
+
+            //Send and receive JSON from WebUntis
+            string requestJson = JsonConvert.SerializeObject(requestExams);
+            string responseJson = SendJsonAndWait(requestJson, _url);
+
+            //Parse JSON to Class
+            ExamResult result = JsonConvert.DeserializeObject<ExamResult>(responseJson);
+
+            if(wus.LastError.Message != null)
+                throw new Exception(wus.LastError.Message);
+
+            //Return the Exams(s)
+            return result.result;
+        }
+
+        /// <summary>
+        /// Get Exam Types (Not yet Implemented)
+        /// </summary>
+        /// <exception cref="NotImplementedException"></exception>
+        /// <returns>The Exam Types(s)</returns>
+        public Exam[] GetExamTypes() {
+            throw new NotImplementedException();
+
+            //Get the JSON
+            ExamTypes requestExams = new ExamTypes();
+
+            //Send and receive JSON from WebUntis
+            string requestJson = JsonConvert.SerializeObject(requestExams);
+            string responseJson = SendJsonAndWait(requestJson, _url);
+
+            //Parse JSON to Class
+            ExamResult result = JsonConvert.DeserializeObject<ExamResult>(responseJson);
+
+            if(wus.LastError.Message != null)
+                throw new Exception(wus.LastError.Message);
+
+            //Return the Exams(s)
             return result.result;
         }
 
