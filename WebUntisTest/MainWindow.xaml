@@ -16,17 +16,17 @@
         <DockPanel VerticalAlignment="Top" Margin="20">
             <Label>Username</Label>
             <TextBox HorizontalAlignment="Stretch" Margin="3"
-                     Name="UsernameBox"></TextBox>
+                     Name="UsernameBox">mrousavy</TextBox>
         </DockPanel>
         <DockPanel VerticalAlignment="Top" Margin="20">
             <Label>Password</Label>
             <PasswordBox HorizontalAlignment="Stretch" Margin="3"
-                         Name="PasswordBox"></PasswordBox>
+                         Name="PasswordBox" KeyDown="PasswordBox_OnKeyDown"></PasswordBox>
         </DockPanel>
     </StackPanel>
         <StackPanel Orientation="Horizontal"
                     VerticalAlignment="Bottom" HorizontalAlignment="Right">
-            <Button Margin="10" Width="40" Click="Ok_Click">Ok</Button>
+            <Button Margin="10" Width="40" Click="Submit_Event">Ok</Button>
         </StackPanel>
     </Grid>
 </Window>

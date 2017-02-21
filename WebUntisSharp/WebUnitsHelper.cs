@@ -553,7 +553,7 @@ namespace WebUntisSharp {
 
         //Send JSON
         private static async Task SendJson(string json, string url, string sessionId) {
-            HttpWebRequest httpWebRequest = (HttpWebRequest)WebRequest.Create(url);
+            HttpWebRequest httpWebRequest = (HttpWebRequest)WebRequest.Create($"{url};jsessionid={sessionId}");
             httpWebRequest.ContentType = "application/json";
             httpWebRequest.Method = "POST";
 
@@ -568,7 +568,7 @@ namespace WebUntisSharp {
         private static async Task<string> SendJsonAndWait(string json, string url, string sessionId) {
             string result;
 
-            HttpWebRequest httpWebRequest = (HttpWebRequest)WebRequest.Create(url);
+            HttpWebRequest httpWebRequest = (HttpWebRequest)WebRequest.Create($"{url}&jsessionid={sessionId}");
             httpWebRequest.ContentType = "application/json";
             httpWebRequest.Method = "POST";
 
@@ -594,7 +594,7 @@ namespace WebUntisSharp {
         private static string SendJsonAndWaitSynchronous(string json, string url, string sessionId) {
             string result;
 
-            HttpWebRequest httpWebRequest = (HttpWebRequest)WebRequest.Create(url);
+            HttpWebRequest httpWebRequest = (HttpWebRequest)WebRequest.Create($"{url}&jsessionid={sessionId}");
             httpWebRequest.ContentType = "application/json";
             httpWebRequest.Method = "POST";
 

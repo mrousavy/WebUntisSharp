@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows;
+using System.Windows.Input;
 using WebUntisSharp;
 
 namespace WebUntisTest {
@@ -12,9 +13,10 @@ namespace WebUntisTest {
         public MainWindow() {
             InitializeComponent();
 
+            PasswordBox.Focus();
         }
 
-        private async void Ok_Click(object sender, RoutedEventArgs e) {
+        private async void Submit_Event(object sender, RoutedEventArgs e) {
             try {
                 _untis = new WebUntis(UsernameBox.Text, PasswordBox.Password, SchoolUrlBox.Text, "WebUntisSharp API");
 
@@ -22,7 +24,7 @@ namespace WebUntisTest {
                     MessageBox.Show(WebUntisSharp.WebUnitsJsonSchemes.LastError.Message);
                 } else {
                     var classregevents = await _untis.GetClassRegEvents(01012015, 01012016);
-                    var classes = await _untis.GetClasses();
+                    var classes = await _untis.GetClasses("1");
                     var departments = await _untis.GetDepartments();
                     var exams = await _untis.GetExams(01012015, 01012016, 1);
                     var holidays = await _untis.GetHolidays();
@@ -44,6 +46,11 @@ namespace WebUntisTest {
             } catch(Exception ex) {
                 MessageBox.Show("Error: " + ex.Message);
             }
+        }
+
+        private void PasswordBox_OnKeyDown(object sender, KeyEventArgs e) {
+            if(e.Key == Key.Enter)
+                Submit_Event(null, null);
         }
     }
 }
