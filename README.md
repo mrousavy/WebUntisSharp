@@ -6,19 +6,23 @@ A Wrapper of the [WebUntis](http://www.untis.at/Downloads/int/Manuals/de/WebUnti
 # How to use
 
 ###1. Create WebUntis Object
+* C#:
 ```C#
 WebUntis untis = new WebUntis("mrousavy", "password1234", schoolUrl, "WebUntisSharp API");
 ```
 
+* VB:
 ```VB
 Dim untis As WebUntis = new WebUntis("mrousavy", "password1234", schoolUrl, "WebUntisSharp API");
 ```
 
 ###2. Send Requests
+* C#:
 ```C#
 var timegrid = await _untis.GetTimegrid();
 ```
 
+* VB:
 ```VB
 Dim timegrid As Timegrid = await _untis.GetTimegrid();
 ```
