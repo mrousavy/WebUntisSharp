@@ -539,7 +539,7 @@ namespace WebUntisSharp {
 
             //Send and receive JSON from WebUntis
             string requestJson = JsonConvert.SerializeObject(auth);
-            string responseJson = SendJsonAndWaitSynchronous(requestJson, _url, SessionId);
+            string responseJson = SendJsonAndWaitSynchronous(requestJson, _url);
 
             //Parse JSON to Class
             AuthenticationResult result = JsonConvert.DeserializeObject<AuthenticationResult>(responseJson);
@@ -553,9 +553,18 @@ namespace WebUntisSharp {
 
         //Send JSON
         private static async Task SendJson(string json, string url, string sessionId) {
-            HttpWebRequest httpWebRequest = (HttpWebRequest)WebRequest.Create($"{url};jsessionid={sessionId}");
+            Uri uri = new Uri(url);
+
+            HttpWebRequest httpWebRequest = (HttpWebRequest)WebRequest.Create(url);
             httpWebRequest.ContentType = "application/json";
             httpWebRequest.Method = "POST";
+
+            //Add JSESSION ID Cookie
+            if(httpWebRequest.CookieContainer == null)
+                httpWebRequest.CookieContainer = new CookieContainer();
+
+            if(!string.IsNullOrWhiteSpace(sessionId))
+                httpWebRequest.CookieContainer.Add(new Cookie("JSESSIONID", sessionId, "/", uri.Host));
 
             using(StreamWriter streamWriter = new StreamWriter(await httpWebRequest.GetRequestStreamAsync())) {
                 await streamWriter.WriteAsync(json);
@@ -567,10 +576,18 @@ namespace WebUntisSharp {
         //Send JSON and wait for response
         private static async Task<string> SendJsonAndWait(string json, string url, string sessionId) {
             string result;
+            Uri uri = new Uri(url);
 
-            HttpWebRequest httpWebRequest = (HttpWebRequest)WebRequest.Create($"{url}&jsessionid={sessionId}");
+            HttpWebRequest httpWebRequest = (HttpWebRequest)WebRequest.Create(uri);
             httpWebRequest.ContentType = "application/json";
             httpWebRequest.Method = "POST";
+
+            //Add JSESSION ID Cookie
+            if(httpWebRequest.CookieContainer == null)
+                httpWebRequest.CookieContainer = new CookieContainer();
+
+            if(!string.IsNullOrWhiteSpace(sessionId))
+                httpWebRequest.CookieContainer.Add(new Cookie("JSESSIONID", sessionId, "/", uri.Host));
 
             using(StreamWriter streamWriter = new StreamWriter(await httpWebRequest.GetRequestStreamAsync())) {
                 await streamWriter.WriteAsync(json);
@@ -590,11 +607,11 @@ namespace WebUntisSharp {
             return result;
         }
 
-        //Send JSON and wait for response
-        private static string SendJsonAndWaitSynchronous(string json, string url, string sessionId) {
+        //Send JSON and wait for response (not async) (only for Login/Constructor Method)
+        private static string SendJsonAndWaitSynchronous(string json, string url) {
             string result;
 
-            HttpWebRequest httpWebRequest = (HttpWebRequest)WebRequest.Create($"{url}&jsessionid={sessionId}");
+            HttpWebRequest httpWebRequest = (HttpWebRequest)WebRequest.Create(url);
             httpWebRequest.ContentType = "application/json";
             httpWebRequest.Method = "POST";
 

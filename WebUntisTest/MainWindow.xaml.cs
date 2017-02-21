@@ -23,9 +23,9 @@ namespace WebUntisTest {
                 if(WebUntisSharp.WebUnitsJsonSchemes.LastError.Message != null) {
                     MessageBox.Show(WebUntisSharp.WebUnitsJsonSchemes.LastError.Message);
                 } else {
+                    var departments = await _untis.GetDepartments();
                     var classregevents = await _untis.GetClassRegEvents(01012015, 01012016);
                     var classes = await _untis.GetClasses("1");
-                    var departments = await _untis.GetDepartments();
                     var exams = await _untis.GetExams(01012015, 01012016, 1);
                     var holidays = await _untis.GetHolidays();
                     var lastimporttime = await _untis.GetLastImportTime();
