@@ -58,7 +58,7 @@ Dim timegrid As Timegrid = await untis.GetTimegrid()
    * VB:
    ```VB
    Using untis As New WebUntis("mrousavy", "password1234", schoolUrl, "WebUntisSharp API")
-      //Your Requests to the WebUntis API go here
+      ' Your Requests to the WebUntis API go here
    End Using
-   //WebUntis Object is now disposed and Logged out (Session has ended)
+   ' WebUntis Object is now disposed and Logged out (Session has ended)
    ```
