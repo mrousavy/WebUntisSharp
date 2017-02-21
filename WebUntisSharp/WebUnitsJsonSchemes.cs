@@ -168,7 +168,7 @@ namespace WebUntisSharp {
                 public Params @params;
 
                 public class Params {
-                    string schoolyearId;
+                    public string schoolyearId;
                 }
             }
 

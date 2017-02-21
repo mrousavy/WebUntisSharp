@@ -119,10 +119,15 @@ namespace WebUntisSharp {
         /// <summary>
         /// Get a List of all Classes
         /// </summary>
+        /// <param name="schoolyearId">The ID of the school year to query Classes</param>
         /// <returns>The <see cref="List{Class}"/> of all returned Classes.</returns>
-        public async Task<List<Class>> GetClasses() {
+        public async Task<List<Class>> GetClasses(string schoolyearId) {
             //Get the JSON
-            GetClasses classes = new GetClasses();
+            GetClasses classes = new GetClasses {
+                @params = new GetClasses.Params() {
+                    schoolyearId = schoolyearId
+                }
+            };
 
             //Send and receive JSON from WebUntis
             string requestJson = JsonConvert.SerializeObject(classes);
@@ -493,6 +498,7 @@ namespace WebUntisSharp {
             return result.result;
         }
 
+
         /// <summary>
         /// Get Exam Types (Not yet Implemented)
         /// </summary>
@@ -519,19 +525,6 @@ namespace WebUntisSharp {
         }
 
         #region Private Methods
-        //Send JSON
-        private async static Task SendJson(string json, string url, string sessionId) {
-            HttpWebRequest httpWebRequest = (HttpWebRequest)WebRequest.Create(url);
-            httpWebRequest.ContentType = "application/json";
-            httpWebRequest.Method = "POST";
-
-            using(StreamWriter streamWriter = new StreamWriter(await httpWebRequest.GetRequestStreamAsync())) {
-                await streamWriter.WriteAsync(json);
-                streamWriter.Flush();
-                streamWriter.Close();
-            }
-        }
-
         //Log user in
         private void Login(string user, string password, string client) {
             //Login to WebUntis
@@ -558,8 +551,21 @@ namespace WebUntisSharp {
             SessionId = result.result.sessionId;
         }
 
+        //Send JSON
+        private static async Task SendJson(string json, string url, string sessionId) {
+            HttpWebRequest httpWebRequest = (HttpWebRequest)WebRequest.Create(url);
+            httpWebRequest.ContentType = "application/json";
+            httpWebRequest.Method = "POST";
+
+            using(StreamWriter streamWriter = new StreamWriter(await httpWebRequest.GetRequestStreamAsync())) {
+                await streamWriter.WriteAsync(json);
+                streamWriter.Flush();
+                streamWriter.Close();
+            }
+        }
+
         //Send JSON and wait for response
-        private async static Task<string> SendJsonAndWait(string json, string url, string sessionId) {
+        private static async Task<string> SendJsonAndWait(string json, string url, string sessionId) {
             string result;
 
             HttpWebRequest httpWebRequest = (HttpWebRequest)WebRequest.Create(url);
@@ -583,7 +589,6 @@ namespace WebUntisSharp {
 
             return result;
         }
-
 
         //Send JSON and wait for response
         private static string SendJsonAndWaitSynchronous(string json, string url, string sessionId) {
