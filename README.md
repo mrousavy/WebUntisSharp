@@ -32,7 +32,7 @@ var timegrid = await untis.GetTimegrid();
 
 * VB:
 ```VB
-Dim timegrid As Timegrid = await untis.GetTimegrid()
+Dim timegrid As Timegrid = Await untis.GetTimegrid()
 ```
 
 ### 4. Logout
