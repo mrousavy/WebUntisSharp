@@ -21,16 +21,44 @@ WebUntis untis = new WebUntis("mrousavy", "password1234", schoolUrl, "WebUntisSh
 
 * VB:
 ```VB
-Dim untis As WebUntis = new WebUntis("mrousavy", "password1234", schoolUrl, "WebUntisSharp API");
+Dim untis As new WebUntis("mrousavy", "password1234", schoolUrl, "WebUntisSharp API")
 ```
 
 ### 3. Send Requests
 * C#:
 ```C#
-var timegrid = await _untis.GetTimegrid();
+var timegrid = await untis.GetTimegrid();
 ```
 
 * VB:
 ```VB
-Dim timegrid As Timegrid = await _untis.GetTimegrid();
+Dim timegrid As Timegrid = await untis.GetTimegrid()
 ```
+
+### 4. Logout
+* Logout Method
+   * C#:
+   ```C#
+    untis.Logout();
+    ```
+
+   * VB:
+    ```VB
+   untis.Logout()
+   ```
+* using Statement
+   * C#:
+   ```C#
+   using(WebUntis untis = new WebUntis("mrousavy", "password1234", schoolUrl, "WebUntisSharp API")){
+      //Your Requests to the WebUntis API go here
+   }
+   //WebUntis Object is now disposed and Logged out (Session has ended)
+   ```
+   
+   * VB:
+   ```VB
+   Using untis As New WebUntis("mrousavy", "password1234", schoolUrl, "WebUntisSharp API")
+      //Your Requests to the WebUntis API go here
+   End Using
+   //WebUntis Object is now disposed and Logged out (Session has ended)
+   ```
