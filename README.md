@@ -5,7 +5,15 @@ A Wrapper of the [WebUntis](http://www.untis.at/Downloads/int/Manuals/de/WebUnti
 
 # How to use
 
-###1. Create WebUntis Object
+### 1. Add Binaries
+   + NuGet
+      * [WebUntisSharp is also available on NuGet!](https://www.nuget.org/packages/WebUntisSharp)   Install by typing `Install-Package WebUntisSharp` in NuGet Package Manager Console. (Or search for `WebUntisSharp` on NuGet)
+
+   + Manually
+      1. [Download the latest Library (.dll)](???)
+      2. Add the .dll to your Project   (Right click `References` in the Project Tree View, click `Add References` and `Browse` to the `.dll` File)
+
+### 2. Create WebUntis Object
 * C#:
 ```C#
 WebUntis untis = new WebUntis("mrousavy", "password1234", schoolUrl, "WebUntisSharp API");
@@ -16,7 +24,7 @@ WebUntis untis = new WebUntis("mrousavy", "password1234", schoolUrl, "WebUntisSh
 Dim untis As WebUntis = new WebUntis("mrousavy", "password1234", schoolUrl, "WebUntisSharp API");
 ```
 
-###2. Send Requests
+### 3. Send Requests
 * C#:
 ```C#
 var timegrid = await _untis.GetTimegrid();

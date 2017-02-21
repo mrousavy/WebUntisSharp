@@ -68,8 +68,9 @@ namespace WebUntisSharp {
             string requestJson = JsonConvert.SerializeObject(logout);
             await SendJson(requestJson, _url, SessionId);
 
-            if(!SuppressErrors && wus.LastError.Message != null)
-                throw new Exception(wus.LastError.Message);
+            string errorMsg = wus.LastError.Message;
+            if(!SuppressErrors && errorMsg != null)
+                throw new Exception(errorMsg);
         }
 
         /// <summary>
@@ -87,8 +88,9 @@ namespace WebUntisSharp {
             //Parse JSON to Class
             TeachersResult result = JsonConvert.DeserializeObject<TeachersResult>(responseJson);
 
-            if(!SuppressErrors && wus.LastError.Message != null)
-                throw new Exception(wus.LastError.Message);
+            string errorMsg = wus.LastError.Message;
+            if(!SuppressErrors && errorMsg != null)
+                throw new Exception(errorMsg);
 
             //Return all the Teachers
             return new List<Teacher>(result.result);
@@ -109,8 +111,9 @@ namespace WebUntisSharp {
             //Parse JSON to Class
             StudentsResult result = JsonConvert.DeserializeObject<StudentsResult>(responseJson);
 
-            if(!SuppressErrors && wus.LastError.Message != null)
-                throw new Exception(wus.LastError.Message);
+            string errorMsg = wus.LastError.Message;
+            if(!SuppressErrors && errorMsg != null)
+                throw new Exception(errorMsg);
 
             //Return all the Students
             return new List<Student>(result.result);
@@ -136,8 +139,9 @@ namespace WebUntisSharp {
             //Parse JSON to Class
             ClassesResult result = JsonConvert.DeserializeObject<ClassesResult>(responseJson);
 
-            if(!SuppressErrors && wus.LastError.Message != null)
-                throw new Exception(wus.LastError.Message);
+            string errorMsg = wus.LastError.Message;
+            if(!SuppressErrors && errorMsg != null)
+                throw new Exception(errorMsg);
 
             //Return all the Classes
             return new List<Class>(result.result);
@@ -158,8 +162,9 @@ namespace WebUntisSharp {
             //Parse JSON to Class
             SubjectsResult result = JsonConvert.DeserializeObject<SubjectsResult>(responseJson);
 
-            if(!SuppressErrors && wus.LastError.Message != null)
-                throw new Exception(wus.LastError.Message);
+            string errorMsg = wus.LastError.Message;
+            if(!SuppressErrors && errorMsg != null)
+                throw new Exception(errorMsg);
 
             //Return all the Subjects
             return new List<Subject>(result.result);
@@ -180,8 +185,9 @@ namespace WebUntisSharp {
             //Parse JSON to Class
             RoomsResult result = JsonConvert.DeserializeObject<RoomsResult>(responseJson);
 
-            if(!SuppressErrors && wus.LastError.Message != null)
-                throw new Exception(wus.LastError.Message);
+            string errorMsg = wus.LastError.Message;
+            if(!SuppressErrors && errorMsg != null)
+                throw new Exception(errorMsg);
 
             //Return all the Rooms
             return new List<Room>(result.result);
@@ -202,8 +208,9 @@ namespace WebUntisSharp {
             //Parse JSON to Class
             DepartmentsResult result = JsonConvert.DeserializeObject<DepartmentsResult>(responseJson);
 
-            if(!SuppressErrors && wus.LastError.Message != null)
-                throw new Exception(wus.LastError.Message);
+            string errorMsg = wus.LastError.Message;
+            if(!SuppressErrors && errorMsg != null)
+                throw new Exception(errorMsg);
 
             //Return all the Departments
             return new List<Department>(result.result);
@@ -224,8 +231,9 @@ namespace WebUntisSharp {
             //Parse JSON to Class
             HolidaysResult result = JsonConvert.DeserializeObject<HolidaysResult>(responseJson);
 
-            if(!SuppressErrors && wus.LastError.Message != null)
-                throw new Exception(wus.LastError.Message);
+            string errorMsg = wus.LastError.Message;
+            if(!SuppressErrors && errorMsg != null)
+                throw new Exception(errorMsg);
 
             //Return all the Holidays
             return new List<Holiday>(result.result);
@@ -246,8 +254,9 @@ namespace WebUntisSharp {
             //Parse JSON to Class
             Timegrid result = JsonConvert.DeserializeObject<Timegrid>(responseJson);
 
-            if(!SuppressErrors && wus.LastError.Message != null)
-                throw new Exception(wus.LastError.Message);
+            string errorMsg = wus.LastError.Message;
+            if(!SuppressErrors && errorMsg != null)
+                throw new Exception(errorMsg);
 
             //Return the Timegrid
             return result;
@@ -268,8 +277,9 @@ namespace WebUntisSharp {
             //Parse JSON to Class
             StatusData result = JsonConvert.DeserializeObject<StatusData>(responseJson);
 
-            if(!SuppressErrors && wus.LastError.Message != null)
-                throw new Exception(wus.LastError.Message);
+            string errorMsg = wus.LastError.Message;
+            if(!SuppressErrors && errorMsg != null)
+                throw new Exception(errorMsg);
 
             //Return the Status Data
             return result;
@@ -290,8 +300,9 @@ namespace WebUntisSharp {
             //Parse JSON to Class
             Schoolyear result = JsonConvert.DeserializeObject<Schoolyear>(responseJson);
 
-            if(!SuppressErrors && wus.LastError.Message != null)
-                throw new Exception(wus.LastError.Message);
+            string errorMsg = wus.LastError.Message;
+            if(!SuppressErrors && errorMsg != null)
+                throw new Exception(errorMsg);
 
             //Return the Schoolyear
             return result;
@@ -312,8 +323,9 @@ namespace WebUntisSharp {
             //Parse JSON to Class
             wus.SchoolYears.SchoolyearResult result = JsonConvert.DeserializeObject<wus.SchoolYears.SchoolyearResult>(responseJson);
 
-            if(!SuppressErrors && wus.LastError.Message != null)
-                throw new Exception(wus.LastError.Message);
+            string errorMsg = wus.LastError.Message;
+            if(!SuppressErrors && errorMsg != null)
+                throw new Exception(errorMsg);
 
             //Return the Schoolyears
             return new List<Schoolyear>(result.result);
@@ -345,8 +357,9 @@ namespace WebUntisSharp {
             //Parse JSON to Class
             TimetableResult result = JsonConvert.DeserializeObject<TimetableResult>(responseJson);
 
-            if(!SuppressErrors && wus.LastError.Message != null)
-                throw new Exception(wus.LastError.Message);
+            string errorMsg = wus.LastError.Message;
+            if(!SuppressErrors && errorMsg != null)
+                throw new Exception(errorMsg);
 
             //Return the Timetable for the Element
             return result;
@@ -367,8 +380,9 @@ namespace WebUntisSharp {
             //Parse JSON to Class
             LastImportTimeResult result = JsonConvert.DeserializeObject<LastImportTimeResult>(responseJson);
 
-            if(!SuppressErrors && wus.LastError.Message != null)
-                throw new Exception(wus.LastError.Message);
+            string errorMsg = wus.LastError.Message;
+            if(!SuppressErrors && errorMsg != null)
+                throw new Exception(errorMsg);
 
             //Return the Last Imported Time (DateTime)
             return result.result;
@@ -400,8 +414,9 @@ namespace WebUntisSharp {
             //Parse JSON to Class
             SearchPersonIdResult result = JsonConvert.DeserializeObject<SearchPersonIdResult>(responseJson);
 
-            if(!SuppressErrors && wus.LastError.Message != null)
-                throw new Exception(wus.LastError.Message);
+            string errorMsg = wus.LastError.Message;
+            if(!SuppressErrors && errorMsg != null)
+                throw new Exception(errorMsg);
 
             //Return the Person ID
             return result.result;
@@ -431,8 +446,9 @@ namespace WebUntisSharp {
             //Parse JSON to Class
             SubstitutionResult result = JsonConvert.DeserializeObject<SubstitutionResult>(responseJson);
 
-            if(!SuppressErrors && wus.LastError.Message != null)
-                throw new Exception(wus.LastError.Message);
+            string errorMsg = wus.LastError.Message;
+            if(!SuppressErrors && errorMsg != null)
+                throw new Exception(errorMsg);
 
             //Return the Substitutions
             return result.result;
@@ -460,8 +476,9 @@ namespace WebUntisSharp {
             //Parse JSON to Class
             ClassregEventsResult result = JsonConvert.DeserializeObject<ClassregEventsResult>(responseJson);
 
-            if(!SuppressErrors && wus.LastError.Message != null)
-                throw new Exception(wus.LastError.Message);
+            string errorMsg = wus.LastError.Message;
+            if(!SuppressErrors && errorMsg != null)
+                throw new Exception(errorMsg);
 
             //Return the ClassregEvent(s)
             return result.result;
@@ -491,8 +508,9 @@ namespace WebUntisSharp {
             //Parse JSON to Class
             ExamResult result = JsonConvert.DeserializeObject<ExamResult>(responseJson);
 
-            if(!SuppressErrors && wus.LastError.Message != null)
-                throw new Exception(wus.LastError.Message);
+            string errorMsg = wus.LastError.Message;
+            if(!SuppressErrors && errorMsg != null)
+                throw new Exception(errorMsg);
 
             //Return the Exams(s)
             return result.result;
@@ -517,8 +535,9 @@ namespace WebUntisSharp {
             ////Parse JSON to Class
             //ExamResult result = JsonConvert.DeserializeObject<ExamResult>(responseJson);
 
-            //if(!SuppressErrors && wus.LastError.Message != null)
-            //    throw new Exception(wus.LastError.Message);
+            //string errorMsg = wus.LastError.Message;
+            //if(!SuppressErrors && errorMsg != null)
+            //    throw new Exception(errorMsg);
 
             ////Return the Exams Types(s)
             //return result.result;
@@ -544,8 +563,9 @@ namespace WebUntisSharp {
             //Parse JSON to Class
             AuthenticationResult result = JsonConvert.DeserializeObject<AuthenticationResult>(responseJson);
 
-            if(!SuppressErrors && wus.LastError.Message != null)
-                throw new Exception(wus.LastError.Message);
+            string errorMsg = wus.LastError.Message;
+            if(!SuppressErrors && errorMsg != null)
+                throw new Exception(errorMsg);
 
             //Get Session ID
             SessionId = result.result.sessionId;

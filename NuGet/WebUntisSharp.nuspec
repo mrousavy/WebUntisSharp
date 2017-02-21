@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>WebUntisSharp</id>
+    <version>1.0.0.2</version>
+    <authors>mrousavy</authors>
+    <owners>mrousavy</owners>
+    <licenseUrl>https://raw.githubusercontent.com/mrousavy/WebUntisSharp/master/LICENSE</licenseUrl>
+    <projectUrl>http://github.com/mrousavy/WebUntisSharp</projectUrl>
+    <iconUrl>http://raw.githubusercontent.com/mrousavy/WebUntisSharp/master/Images/Logo.png</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>WebUntis (stpl/Timetable for schools) JSON API in C#</description>
+    <releaseNotes>Bugfixes</releaseNotes>
+    <copyright>Copyright 2016</copyright>
+    <tags>WebUntis Untis JSON API C# stpl</tags>
+	
+  <dependencies>
+     <dependency id="Newtonsoft.Json" />
+  </dependencies>
+  </metadata>
+  
+  <files>
+	<file src="WebUntisSharp.dll" target="lib"/>
+  </files>
+</package>
