@@ -25,7 +25,7 @@ using WebUntisSharp.WebUnitsJsonSchemes.TimetableForElement;
 using Schoolyear = WebUntisSharp.WebUnitsJsonSchemes.CurrentSchoolyear.Schoolyear;
 using wus = WebUntisSharp.WebUnitsJsonSchemes;
 
-namespace WebUntisSharp {
+namespace mrousavy.APIs.WebUntisSharp {
 
     //Helper Class for WebUntis Requests/Responses (JSON/POST)
     public class WebUntis : IDisposable {
