@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace WebUntisSharp {
+namespace mrousavy.APIs.WebUntisSharp {
     //All JSON Queries from the WebUntis API translated to C#
     namespace WebUnitsJsonSchemes {
         //Base-Classes/Schemes for Queries and Responses
@@ -393,11 +393,11 @@ namespace WebUntisSharp {
                 //array of room ids
                 public int[] ro;
 
-                //„ls“ (lesson) | „oh“ (office hour) | „sb“ (standby) | „bs“ (break supervision) | „ex“ (examination)
+                //Â„lsÂ“ (lesson) | Â„ohÂ“ (office hour) | Â„sbÂ“ (standby) | Â„bsÂ“ (break supervision) | Â„exÂ“ (examination)
                 //omitted if lesson
                 public string lstype;
 
-                //„“ | „cancelled“ | „irregular“
+                //Â„Â“ | Â„cancelledÂ“ | Â„irregularÂ“
                 //omitted if empty
                 public string code;
 
