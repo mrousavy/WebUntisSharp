@@ -1,5 +1,5 @@
 # <img src="https://raw.githubusercontent.com/mrousavy/WebUntisSharp/master/Images/Logo.png" width="50"> WebUntisSharp
-A Wrapper of the [WebUntis](http://www.untis.at/Downloads/int/Manuals/de/WebUntis.pdf) JSON API for .NET
+A Wrapper of the [WebUntis](http://www.untis.at/Downloads/int/Manuals/de/WebUntis.pdf) JSON API for .NET for sending and receiving Untis Informations
 
 <img src="http://sankt-ansgar-schule.de/wp-content/uploads/2016/08/WebUntis.png">
 
