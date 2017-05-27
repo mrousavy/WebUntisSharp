@@ -1,6 +1,7 @@
 <p align="center">
   <img src="https://raw.githubusercontent.com/mrousavy/WebUntisSharp/master/Images/Logo.png" width="50" />
-  <img src="http://sankt-ansgar-schule.de/wp-content/uploads/2016/08/WebUntis.png" height="120" />
+  <br/>
+  <img src="http://sankt-ansgar-schule.de/wp-content/uploads/2016/08/WebUntis.png" height="100" />
   <h3 align="center">WebUntisSharp</h3>
   <p align="center">A Wrapper of the <a href="http://www.untis.at/Downloads/int/Manuals/de/WebUntis.pdf">WebUntis</a> JSON API for .NET for sending and receiving Untis Informations</p>
   <p align="center">
