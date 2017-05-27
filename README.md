@@ -5,6 +5,10 @@ A Wrapper of the [WebUntis](http://www.untis.at/Downloads/int/Manuals/de/WebUnti
 
 # How to use
 
+## Full guide
+Take a look at the [wiki](https://github.com/mrousavy/WebUntisSharp/wiki) to see the full documentation for this API.
+
+## Quickstart
 ### 1. Add Binaries
    + NuGet
       * [WebUntisSharp is also available on NuGet!](https://www.nuget.org/packages/WebUntisSharp)   Install by typing `Install-Package WebUntisSharp` in NuGet Package Manager Console. (Or search for `WebUntisSharp` on NuGet)
@@ -49,10 +53,10 @@ Dim timegrid As Timegrid = Await untis.GetTimegrid()
 * using Statement
    * C#:
    ```C#
-   using(WebUntis untis = new WebUntis("mrousavy", "password1234", schoolUrl, "WebUntisSharp API")){
-      //Your Requests to the WebUntis API go here
+   using(WebUntis untis = new WebUntis("mrousavy", "password1234", schoolUrl, "WebUntisSharp API")) 
+      // our Requests to the WebUntis API go here
    }
-   //WebUntis Object is now disposed and Logged out (Session has ended)
+   // ebUntis Object is now disposed and Logged out (Session has ended)
    ```
    
    * VB:
