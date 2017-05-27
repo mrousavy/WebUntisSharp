@@ -1,6 +1,7 @@
 <p align="center">
   <img src="https://raw.githubusercontent.com/mrousavy/WebUntisSharp/master/Images/Logo.png" width="50" />
-  <img src="http://sankt-ansgar-schule.de/wp-content/uploads/2016/08/WebUntis.png" height="120" />
+  <br/>
+  <img src="http://sankt-ansgar-schule.de/wp-content/uploads/2016/08/WebUntis.png" height="100" />
   <h3 align="center">WebUntisSharp</h3>
   <p align="center">A Wrapper of the <a href="http://www.untis.at/Downloads/int/Manuals/de/WebUntis.pdf">WebUntis</a> JSON API for .NET for sending and receiving Untis Informations</p>
   <p align="center">
@@ -20,7 +21,7 @@ Take a look at the [wiki](https://github.com/mrousavy/WebUntisSharp/wiki) to see
       * [WebUntisSharp is also available on NuGet!](https://www.nuget.org/packages/WebUntisSharp)   Install by typing `Install-Package WebUntisSharp` in NuGet Package Manager Console. (Or search for `WebUntisSharp` on NuGet)
 
    + Manually
-      1. [Download the latest Library (.dll)](https://github.com/mrousavy/WebUntisSharp/releases/download/1.0.0.2/WebUntisSharp.dll)
+      1. [Download the latest Library (.dll)](https://github.com/mrousavy/WebUntisSharp/releases/download/1.0.0.3/WebUntisSharp.dll)
       2. Add the .dll to your Project   (Right click `References` in the Project Tree View, click `Add References` and `Browse` to the `.dll` File)
 
 ### 2. Create WebUntis Object
