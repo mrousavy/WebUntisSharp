@@ -102,7 +102,6 @@ namespace mrousavy.APIs.WebUntisSharp {
 
         #endregion
 
-
         #region Session Management
 
         /// <summary>
@@ -335,9 +334,9 @@ namespace mrousavy.APIs.WebUntisSharp {
         }
 
         /// <summary>
-        /// Get the Timegrid
+        /// Get the current Timegrid
         /// </summary>
-        /// <returns>The returned Timegrid</returns>
+        /// <returns>The returned Timegrid object</returns>
         public async Task<Timegrid> GetTimegrid() {
             //Get the JSON
             GetTimegrid timegrid = new GetTimegrid();
@@ -427,7 +426,7 @@ namespace mrousavy.APIs.WebUntisSharp {
         }
 
         /// <summary>
-        /// Get a Timetable for an Element
+        /// Get a Timetable for a given Element
         /// </summary>
         /// <param name="elementId">The ID of the Element</param>
         /// <param name="elementType">The type of the Element (1 = klasse, 2 = teacher, 3 = subject, 4 = room, 5 = student)</param>
@@ -461,7 +460,7 @@ namespace mrousavy.APIs.WebUntisSharp {
         }
 
         /// <summary>
-        /// Get the Last Import Time
+        /// Get the last import time
         /// </summary>
         /// <returns>The returned Import Time</returns>
         public async Task<DateTime> GetLastImportTime() {
@@ -580,7 +579,7 @@ namespace mrousavy.APIs.WebUntisSharp {
         }
 
         /// <summary>
-        /// Get ClassregEvents
+        /// Get Exams
         /// </summary>
         /// <param name="startDate">The Begin Date of the ClassregEvents to filter</param>
         /// <param name="endDate">The End Date of the ClassregEvents to filter</param>

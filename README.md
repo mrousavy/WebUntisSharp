@@ -1,7 +1,13 @@
-# <img src="https://raw.githubusercontent.com/mrousavy/WebUntisSharp/master/Images/Logo.png" width="50"> WebUntisSharp
-A Wrapper of the [WebUntis](http://www.untis.at/Downloads/int/Manuals/de/WebUntis.pdf) JSON API for .NET for sending and receiving Untis Informations
+<p align="center">
+  <img src="https://raw.githubusercontent.com/mrousavy/WebUntisSharp/master/Images/Logo.png" width="50" />
+  <img src="http://sankt-ansgar-schule.de/wp-content/uploads/2016/08/WebUntis.png" height="120" />
+  <h3 align="center">WebUntisSharp</h3>
+  <p align="center">A Wrapper of the <a href="http://www.untis.at/Downloads/int/Manuals/de/WebUntis.pdf">WebUntis</a> JSON API for .NET for sending and receiving Untis Informations</p>
+  <p align="center">
+    <a href="https://github.com/mrousavy/WebUntisSharp/wiki"><img src="https://img.shields.io/badge/API-Documentation-green.svg" alt="Documentation"></a>
+  </p>
+</p>
 
-<img src="http://sankt-ansgar-schule.de/wp-content/uploads/2016/08/WebUntis.png">
 
 # How to use
 
@@ -53,12 +59,12 @@ Dim timegrid As Timegrid = Await untis.GetTimegrid()
 * using Statement
    * C#:
    ```C#
-   using(WebUntis untis = new WebUntis("mrousavy", "password1234", schoolUrl, "WebUntisSharp API")) 
+   using(WebUntis untis = new WebUntis("mrousavy", "password1234", schoolUrl, "WebUntisSharp API"))
       // our Requests to the WebUntis API go here
    }
    // ebUntis Object is now disposed and Logged out (Session has ended)
    ```
-   
+
    * VB:
    ```VB
    Using untis As New WebUntis("mrousavy", "password1234", schoolUrl, "WebUntisSharp API")

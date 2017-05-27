@@ -384,7 +384,7 @@ namespace mrousavy.APIs.WebUntisSharp {
                 public long startTime;
                 public long endTime;
 
-                //array of klassen ids
+                //array of classes ids
                 public int[] kl;
                 //array of teacher ids
                 public int[] te;
