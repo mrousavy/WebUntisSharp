@@ -1,9 +1,3 @@
-using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Net;
-using System.Threading.Tasks;
 using mrousavy.APIs.WebUntisSharp.WebUnitsJsonSchemes.Classes;
 using mrousavy.APIs.WebUntisSharp.WebUnitsJsonSchemes.ClassregEvents;
 using mrousavy.APIs.WebUntisSharp.WebUnitsJsonSchemes.CurrentSchoolyear;
@@ -22,6 +16,12 @@ using mrousavy.APIs.WebUntisSharp.WebUnitsJsonSchemes.Substitutions;
 using mrousavy.APIs.WebUntisSharp.WebUnitsJsonSchemes.Teachers;
 using mrousavy.APIs.WebUntisSharp.WebUnitsJsonSchemes.Timegrid;
 using mrousavy.APIs.WebUntisSharp.WebUnitsJsonSchemes.TimetableForElement;
+using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Net;
+using System.Threading.Tasks;
 using Schoolyear = mrousavy.APIs.WebUntisSharp.WebUnitsJsonSchemes.CurrentSchoolyear.Schoolyear;
 using wus = mrousavy.APIs.WebUntisSharp.WebUnitsJsonSchemes;
 
@@ -31,6 +31,7 @@ namespace mrousavy.APIs.WebUntisSharp {
     public class WebUntis : IDisposable {
         #region Privates
         private readonly string _url;
+        private bool _loggedIn;
         #endregion
 
         #region Publics
@@ -43,8 +44,20 @@ namespace mrousavy.APIs.WebUntisSharp {
         public static int LastErrorCode => wus.LastError.Code;
         #endregion
 
+        #region Constructor
+
         /// <summary>
-        /// Create a new <seealso cref="WebUntis"/> Object and start a new Session
+        /// Create a new <seealso cref="WebUntis"/> Object and start a new Session (use <seealso cref="WebUntis.New(..)"/> for async login)
+        /// </summary>
+        /// <param name="user">The Username of the User to Login</param>
+        /// <param name="password">The Password of the User to Login</param>
+        /// <param name="schoolUrl">The URL of the WebUntis JSON URL (e.g. http(s)://&lt;SERVER&gt;/WebUntis/jsonrpc.do)</param>
+        public WebUntis(string user, string password, string schoolUrl) : this(user, password, schoolUrl, "WebUntisSharp") {
+
+        }
+
+        /// <summary>
+        /// Create a new <seealso cref="WebUntis"/> Object and start a new Session (use <seealso cref="WebUntis.New(..)"/> for async login)
         /// </summary>
         /// <param name="user">The Username of the User to Login</param>
         /// <param name="password">The Password of the User to Login</param>
@@ -53,14 +66,92 @@ namespace mrousavy.APIs.WebUntisSharp {
         public WebUntis(string user, string password, string schoolUrl, string client) {
             _url = schoolUrl;
 
-            Login(user, password, client);
+            Login(user, password, client).GetAwaiter().GetResult();
         }
+
+
+        /// <summary>
+        /// Create a new <seealso cref="WebUntis"/> Object and do not login yet (for WebUntis.New(..))
+        /// </summary>
+        private WebUntis(string schoolUrl) {
+            _url = schoolUrl;
+        }
+
+        /// <summary>
+        /// Create a new <seealso cref="WebUntis"/> Object and start a new Session asynchronously
+        /// </summary>
+        /// <param name="user">The Username of the User to Login</param>
+        /// <param name="password">The Password of the User to Login</param>
+        /// <param name="schoolUrl">The URL of the WebUntis JSON URL (e.g. http(s)://&lt;SERVER&gt;/WebUntis/jsonrpc.do)</param>
+        public static async Task<WebUntis> New(string user, string password, string schoolUrl) {
+            return await New(user, password, schoolUrl, "WebUntisSharp");
+        }
+
+        /// <summary>
+        /// Create a new <seealso cref="WebUntis"/> Object and start a new Session asynchronously
+        /// </summary>
+        /// <param name="user">The Username of the User to Login</param>
+        /// <param name="password">The Password of the User to Login</param>
+        /// <param name="schoolUrl">The URL of the WebUntis JSON URL (e.g. http(s)://&lt;SERVER&gt;/WebUntis/jsonrpc.do)</param>
+        /// <param name="client">The Client (e.g. "ANDROID")</param>
+        public static async Task<WebUntis> New(string user, string password, string schoolUrl, string client) {
+            WebUntis untis = new WebUntis(schoolUrl);
+            await untis.Login(user, password, client);
+            return untis;
+        }
+
+        #endregion
+
+
+        #region Session Management
+
+        /// <summary>
+        /// Create a new session and login with given credentials
+        /// </summary>
+        /// <param name="user">Username for the WebUntis account</param>
+        /// <param name="password">Password for the WebUntis account</param>
+        /// <param name="client">The Client (e.g. "ANDROID")</param>
+        /// <returns></returns>
+        public async Task Login(string user, string password, string client) {
+            if (_loggedIn)
+                throw new WebUntisException("This object is already logged in!");
+
+            //Login to WebUntis
+            //Get the JSON
+            Authentication auth = new Authentication {
+                @params = new Authentication.Params {
+                    user = user,
+                    password = password,
+                    client = client
+                }
+            };
+
+            //Send and receive JSON from WebUntis
+            string requestJson = JsonConvert.SerializeObject(auth);
+            string responseJson = await SendJsonAndWait(requestJson, _url, null);
+
+            //Parse JSON to Class
+            AuthenticationResult result = JsonConvert.DeserializeObject<AuthenticationResult>(responseJson);
+
+            string errorMsg = wus.LastError.Message;
+            if (!SuppressErrors && errorMsg != null)
+                throw new WebUntisException(errorMsg);
+
+            //Get Session ID
+            SessionId = result.result.sessionId;
+
+            _loggedIn = true;
+        }
+
 
         /// <summary>
         /// Logout/End the current Session.
         /// An application should always logout as soon as possible to free system resources on the server
         /// </summary>
-        public async void Logout() {
+        public async Task Logout() {
+            if (!_loggedIn)
+                throw new WebUntisException("This object is not logged in!");
+
             //Get the JSON
             Logout logout = new Logout();
 
@@ -69,9 +160,13 @@ namespace mrousavy.APIs.WebUntisSharp {
             await SendJson(requestJson, _url, SessionId);
 
             string errorMsg = wus.LastError.Message;
-            if(!SuppressErrors && errorMsg != null)
-                throw new Exception(errorMsg);
+            if (!SuppressErrors && errorMsg != null)
+                throw new WebUntisException(errorMsg);
         }
+
+        #endregion
+
+        #region Untis calls
 
         /// <summary>
         /// Get a List of all Teachers
@@ -89,8 +184,8 @@ namespace mrousavy.APIs.WebUntisSharp {
             TeachersResult result = JsonConvert.DeserializeObject<TeachersResult>(responseJson);
 
             string errorMsg = wus.LastError.Message;
-            if(!SuppressErrors && errorMsg != null)
-                throw new Exception(errorMsg);
+            if (!SuppressErrors && errorMsg != null)
+                throw new WebUntisException(errorMsg);
 
             //Return all the Teachers
             return new List<Teacher>(result.result);
@@ -112,8 +207,8 @@ namespace mrousavy.APIs.WebUntisSharp {
             StudentsResult result = JsonConvert.DeserializeObject<StudentsResult>(responseJson);
 
             string errorMsg = wus.LastError.Message;
-            if(!SuppressErrors && errorMsg != null)
-                throw new Exception(errorMsg);
+            if (!SuppressErrors && errorMsg != null)
+                throw new WebUntisException(errorMsg);
 
             //Return all the Students
             return new List<Student>(result.result);
@@ -140,8 +235,8 @@ namespace mrousavy.APIs.WebUntisSharp {
             ClassesResult result = JsonConvert.DeserializeObject<ClassesResult>(responseJson);
 
             string errorMsg = wus.LastError.Message;
-            if(!SuppressErrors && errorMsg != null)
-                throw new Exception(errorMsg);
+            if (!SuppressErrors && errorMsg != null)
+                throw new WebUntisException(errorMsg);
 
             //Return all the Classes
             return new List<Class>(result.result);
@@ -163,8 +258,8 @@ namespace mrousavy.APIs.WebUntisSharp {
             SubjectsResult result = JsonConvert.DeserializeObject<SubjectsResult>(responseJson);
 
             string errorMsg = wus.LastError.Message;
-            if(!SuppressErrors && errorMsg != null)
-                throw new Exception(errorMsg);
+            if (!SuppressErrors && errorMsg != null)
+                throw new WebUntisException(errorMsg);
 
             //Return all the Subjects
             return new List<Subject>(result.result);
@@ -186,8 +281,8 @@ namespace mrousavy.APIs.WebUntisSharp {
             RoomsResult result = JsonConvert.DeserializeObject<RoomsResult>(responseJson);
 
             string errorMsg = wus.LastError.Message;
-            if(!SuppressErrors && errorMsg != null)
-                throw new Exception(errorMsg);
+            if (!SuppressErrors && errorMsg != null)
+                throw new WebUntisException(errorMsg);
 
             //Return all the Rooms
             return new List<Room>(result.result);
@@ -209,8 +304,8 @@ namespace mrousavy.APIs.WebUntisSharp {
             DepartmentsResult result = JsonConvert.DeserializeObject<DepartmentsResult>(responseJson);
 
             string errorMsg = wus.LastError.Message;
-            if(!SuppressErrors && errorMsg != null)
-                throw new Exception(errorMsg);
+            if (!SuppressErrors && errorMsg != null)
+                throw new WebUntisException(errorMsg);
 
             //Return all the Departments
             return new List<Department>(result.result);
@@ -232,8 +327,8 @@ namespace mrousavy.APIs.WebUntisSharp {
             HolidaysResult result = JsonConvert.DeserializeObject<HolidaysResult>(responseJson);
 
             string errorMsg = wus.LastError.Message;
-            if(!SuppressErrors && errorMsg != null)
-                throw new Exception(errorMsg);
+            if (!SuppressErrors && errorMsg != null)
+                throw new WebUntisException(errorMsg);
 
             //Return all the Holidays
             return new List<Holiday>(result.result);
@@ -255,8 +350,8 @@ namespace mrousavy.APIs.WebUntisSharp {
             Timegrid result = JsonConvert.DeserializeObject<Timegrid>(responseJson);
 
             string errorMsg = wus.LastError.Message;
-            if(!SuppressErrors && errorMsg != null)
-                throw new Exception(errorMsg);
+            if (!SuppressErrors && errorMsg != null)
+                throw new WebUntisException(errorMsg);
 
             //Return the Timegrid
             return result;
@@ -278,8 +373,8 @@ namespace mrousavy.APIs.WebUntisSharp {
             StatusData result = JsonConvert.DeserializeObject<StatusData>(responseJson);
 
             string errorMsg = wus.LastError.Message;
-            if(!SuppressErrors && errorMsg != null)
-                throw new Exception(errorMsg);
+            if (!SuppressErrors && errorMsg != null)
+                throw new WebUntisException(errorMsg);
 
             //Return the Status Data
             return result;
@@ -301,8 +396,8 @@ namespace mrousavy.APIs.WebUntisSharp {
             Schoolyear result = JsonConvert.DeserializeObject<Schoolyear>(responseJson);
 
             string errorMsg = wus.LastError.Message;
-            if(!SuppressErrors && errorMsg != null)
-                throw new Exception(errorMsg);
+            if (!SuppressErrors && errorMsg != null)
+                throw new WebUntisException(errorMsg);
 
             //Return the Schoolyear
             return result;
@@ -324,8 +419,8 @@ namespace mrousavy.APIs.WebUntisSharp {
             wus.SchoolYears.SchoolyearResult result = JsonConvert.DeserializeObject<wus.SchoolYears.SchoolyearResult>(responseJson);
 
             string errorMsg = wus.LastError.Message;
-            if(!SuppressErrors && errorMsg != null)
-                throw new Exception(errorMsg);
+            if (!SuppressErrors && errorMsg != null)
+                throw new WebUntisException(errorMsg);
 
             //Return the Schoolyears
             return new List<Schoolyear>(result.result);
@@ -358,8 +453,8 @@ namespace mrousavy.APIs.WebUntisSharp {
             TimetableResult result = JsonConvert.DeserializeObject<TimetableResult>(responseJson);
 
             string errorMsg = wus.LastError.Message;
-            if(!SuppressErrors && errorMsg != null)
-                throw new Exception(errorMsg);
+            if (!SuppressErrors && errorMsg != null)
+                throw new WebUntisException(errorMsg);
 
             //Return the Timetable for the Element
             return result;
@@ -381,8 +476,8 @@ namespace mrousavy.APIs.WebUntisSharp {
             LastImportTimeResult result = JsonConvert.DeserializeObject<LastImportTimeResult>(responseJson);
 
             string errorMsg = wus.LastError.Message;
-            if(!SuppressErrors && errorMsg != null)
-                throw new Exception(errorMsg);
+            if (!SuppressErrors && errorMsg != null)
+                throw new WebUntisException(errorMsg);
 
             //Return the Last Imported Time (DateTime)
             return result.result;
@@ -415,8 +510,8 @@ namespace mrousavy.APIs.WebUntisSharp {
             SearchPersonIdResult result = JsonConvert.DeserializeObject<SearchPersonIdResult>(responseJson);
 
             string errorMsg = wus.LastError.Message;
-            if(!SuppressErrors && errorMsg != null)
-                throw new Exception(errorMsg);
+            if (!SuppressErrors && errorMsg != null)
+                throw new WebUntisException(errorMsg);
 
             //Return the Person ID
             return result.result;
@@ -447,8 +542,8 @@ namespace mrousavy.APIs.WebUntisSharp {
             SubstitutionResult result = JsonConvert.DeserializeObject<SubstitutionResult>(responseJson);
 
             string errorMsg = wus.LastError.Message;
-            if(!SuppressErrors && errorMsg != null)
-                throw new Exception(errorMsg);
+            if (!SuppressErrors && errorMsg != null)
+                throw new WebUntisException(errorMsg);
 
             //Return the Substitutions
             return result.result;
@@ -477,8 +572,8 @@ namespace mrousavy.APIs.WebUntisSharp {
             ClassregEventsResult result = JsonConvert.DeserializeObject<ClassregEventsResult>(responseJson);
 
             string errorMsg = wus.LastError.Message;
-            if(!SuppressErrors && errorMsg != null)
-                throw new Exception(errorMsg);
+            if (!SuppressErrors && errorMsg != null)
+                throw new WebUntisException(errorMsg);
 
             //Return the ClassregEvent(s)
             return result.result;
@@ -509,8 +604,8 @@ namespace mrousavy.APIs.WebUntisSharp {
             ExamResult result = JsonConvert.DeserializeObject<ExamResult>(responseJson);
 
             string errorMsg = wus.LastError.Message;
-            if(!SuppressErrors && errorMsg != null)
-                throw new Exception(errorMsg);
+            if (!SuppressErrors && errorMsg != null)
+                throw new WebUntisException(errorMsg);
 
             //Return the Exams(s)
             return result.result;
@@ -537,40 +632,15 @@ namespace mrousavy.APIs.WebUntisSharp {
 
             //string errorMsg = wus.LastError.Message;
             //if(!SuppressErrors && errorMsg != null)
-            //    throw new Exception(errorMsg);
+            //    throw new WebUntisException(errorMsg);
 
             ////Return the Exams Types(s)
             //return result.result;
         }
 
+        #endregion
+
         #region Private Methods
-        //Log user in
-        private void Login(string user, string password, string client) {
-            //Login to WebUntis
-            //Get the JSON
-            Authentication auth = new Authentication {
-                @params = new Authentication.Params {
-                    user = user,
-                    password = password,
-                    client = client
-                }
-            };
-
-            //Send and receive JSON from WebUntis
-            string requestJson = JsonConvert.SerializeObject(auth);
-            string responseJson = SendJsonAndWaitSynchronous(requestJson, _url);
-
-            //Parse JSON to Class
-            AuthenticationResult result = JsonConvert.DeserializeObject<AuthenticationResult>(responseJson);
-
-            string errorMsg = wus.LastError.Message;
-            if(!SuppressErrors && errorMsg != null)
-                throw new Exception(errorMsg);
-
-            //Get Session ID
-            SessionId = result.result.sessionId;
-        }
-
         //Send JSON
         private static async Task SendJson(string json, string url, string sessionId) {
             Uri uri = new Uri(url);
@@ -580,13 +650,13 @@ namespace mrousavy.APIs.WebUntisSharp {
             httpWebRequest.Method = "POST";
 
             //Add JSESSION ID Cookie
-            if(httpWebRequest.CookieContainer == null)
+            if (httpWebRequest.CookieContainer == null)
                 httpWebRequest.CookieContainer = new CookieContainer();
 
-            if(!string.IsNullOrWhiteSpace(sessionId))
+            if (!string.IsNullOrWhiteSpace(sessionId))
                 httpWebRequest.CookieContainer.Add(new Cookie("JSESSIONID", sessionId, "/", uri.Host));
 
-            using(StreamWriter streamWriter = new StreamWriter(await httpWebRequest.GetRequestStreamAsync())) {
+            using (StreamWriter streamWriter = new StreamWriter(await httpWebRequest.GetRequestStreamAsync())) {
                 await streamWriter.WriteAsync(json);
                 streamWriter.Flush();
                 streamWriter.Close();
@@ -603,13 +673,13 @@ namespace mrousavy.APIs.WebUntisSharp {
             httpWebRequest.Method = "POST";
 
             //Add JSESSION ID Cookie
-            if(httpWebRequest.CookieContainer == null)
+            if (httpWebRequest.CookieContainer == null)
                 httpWebRequest.CookieContainer = new CookieContainer();
 
-            if(!string.IsNullOrWhiteSpace(sessionId))
+            if (!string.IsNullOrWhiteSpace(sessionId))
                 httpWebRequest.CookieContainer.Add(new Cookie("JSESSIONID", sessionId, "/", uri.Host));
 
-            using(StreamWriter streamWriter = new StreamWriter(await httpWebRequest.GetRequestStreamAsync())) {
+            using (StreamWriter streamWriter = new StreamWriter(await httpWebRequest.GetRequestStreamAsync())) {
                 await streamWriter.WriteAsync(json);
                 streamWriter.Flush();
                 streamWriter.Close();
@@ -617,10 +687,10 @@ namespace mrousavy.APIs.WebUntisSharp {
 
             HttpWebResponse httpResponse = (HttpWebResponse)await httpWebRequest.GetResponseAsync();
             Stream responseStream = httpResponse.GetResponseStream();
-            if(responseStream == null)
-                throw new Exception("Response Stream was null!");
+            if (responseStream == null)
+                throw new WebUntisException("Response Stream was null!");
 
-            using(StreamReader streamReader = new StreamReader(responseStream)) {
+            using (StreamReader streamReader = new StreamReader(responseStream)) {
                 result = await streamReader.ReadToEndAsync();
             }
 
@@ -635,7 +705,7 @@ namespace mrousavy.APIs.WebUntisSharp {
             httpWebRequest.ContentType = "application/json";
             httpWebRequest.Method = "POST";
 
-            using(StreamWriter streamWriter = new StreamWriter(httpWebRequest.GetRequestStream())) {
+            using (StreamWriter streamWriter = new StreamWriter(httpWebRequest.GetRequestStream())) {
                 streamWriter.Write(json);
                 streamWriter.Flush();
                 streamWriter.Close();
@@ -643,10 +713,10 @@ namespace mrousavy.APIs.WebUntisSharp {
 
             HttpWebResponse httpResponse = (HttpWebResponse)httpWebRequest.GetResponse();
             Stream responseStream = httpResponse.GetResponseStream();
-            if(responseStream == null)
-                throw new Exception("Response Stream was null!");
+            if (responseStream == null)
+                throw new WebUntisException("Response Stream was null!");
 
-            using(StreamReader streamReader = new StreamReader(responseStream)) {
+            using (StreamReader streamReader = new StreamReader(responseStream)) {
                 result = streamReader.ReadToEnd();
             }
 
@@ -661,7 +731,8 @@ namespace mrousavy.APIs.WebUntisSharp {
 
         public void Dispose() {
             SuppressErrors = true;
-            Logout();
+            //sync logout
+            Logout().GetAwaiter().GetResult();
             GC.SuppressFinalize(this);
         }
         #endregion

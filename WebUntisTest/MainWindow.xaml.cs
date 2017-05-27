@@ -1,7 +1,8 @@
-﻿using System;
+﻿using mrousavy.APIs.WebUntisSharp;
+using System;
 using System.Windows;
 using System.Windows.Input;
-using WebUntisSharp;
+using WebUntisSharp = mrousavy.APIs.WebUntisSharp;
 
 namespace WebUntisTest {
     /// <summary>
@@ -20,7 +21,7 @@ namespace WebUntisTest {
             try {
                 _untis = new WebUntis(UsernameBox.Text, PasswordBox.Password, SchoolUrlBox.Text, "WebUntisSharp API");
 
-                if(WebUntisSharp.WebUnitsJsonSchemes.LastError.Message != null) {
+                if (WebUntisSharp.WebUnitsJsonSchemes.LastError.Message != null) {
                     MessageBox.Show(WebUntisSharp.WebUnitsJsonSchemes.LastError.Message);
                 } else {
                     var departments = await _untis.GetDepartments();
@@ -43,13 +44,13 @@ namespace WebUntisTest {
                     var sessionId = _untis.SessionId;
                     Console.Write("Done.");
                 }
-            } catch(Exception ex) {
+            } catch (Exception ex) {
                 MessageBox.Show("Error: " + ex.Message);
             }
         }
 
         private void PasswordBox_OnKeyDown(object sender, KeyEventArgs e) {
-            if(e.Key == Key.Enter)
+            if (e.Key == Key.Enter)
                 Submit_Event(null, null);
         }
     }
