@@ -132,6 +132,9 @@ namespace mrousavy.APIs.WebUntisSharp {
             string requestJson = JsonConvert.SerializeObject(auth);
             string responseJson = await SendJsonAndWait(requestJson, _url, null);
 
+            if (responseJson.Contains("<!DOCTYPE html>"))
+                throw new WebUntisException("The school url is invalid, server responded with HTML!");
+
             //Parse JSON to Class
             AuthenticationResult result = JsonConvert.DeserializeObject<AuthenticationResult>(responseJson);
 
