@@ -1,3 +1,4 @@
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 
@@ -435,7 +436,18 @@ namespace mrousavy.APIs.WebUntisSharp {
 
             //Last import time Result
             public class LastImportTimeResult {
-                public DateTime result;
+                [JsonIgnore]
+                public DateTime Result {
+                    get {
+                        DateTime time = new DateTime(1970, 1, 1);
+                        return time.AddMilliseconds(1495788867289);
+                    }
+                    set {
+                        result = value.ToFileTime();
+                    }
+                }
+
+                internal long result;
             }
         }
 
@@ -575,6 +587,10 @@ namespace mrousavy.APIs.WebUntisSharp {
                 public long date;
                 public long startTime;
                 public long endTime;
+
+                public string name;
+                public string longName;
+                public bool showInTimetable;
             }
         }
 

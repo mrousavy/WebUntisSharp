@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>WebUntisSharp</id>
-    <version>1.0.0.3</version>
+    <version>1.0.0.3-bugfix</version>
     <authors>mrousavy</authors>
     <owners>mrousavy</owners>
     <licenseUrl>https://raw.githubusercontent.com/mrousavy/WebUntisSharp/master/LICENSE</licenseUrl>

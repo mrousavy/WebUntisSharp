@@ -3,6 +3,7 @@ using mrousavy.APIs.WebUntisSharp.WebUnitsJsonSchemes.ClassregEvents;
 using mrousavy.APIs.WebUntisSharp.WebUnitsJsonSchemes.CurrentSchoolyear;
 using mrousavy.APIs.WebUntisSharp.WebUnitsJsonSchemes.Departments;
 using mrousavy.APIs.WebUntisSharp.WebUnitsJsonSchemes.Exams;
+using mrousavy.APIs.WebUntisSharp.WebUnitsJsonSchemes.ExamTypes;
 using mrousavy.APIs.WebUntisSharp.WebUnitsJsonSchemes.Holidays;
 using mrousavy.APIs.WebUntisSharp.WebUnitsJsonSchemes.LastImportTime;
 using mrousavy.APIs.WebUntisSharp.WebUnitsJsonSchemes.PersonIdSearch;
@@ -22,6 +23,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Threading.Tasks;
+using WebUntisSharp;
 using Schoolyear = mrousavy.APIs.WebUntisSharp.WebUnitsJsonSchemes.CurrentSchoolyear.Schoolyear;
 using wus = mrousavy.APIs.WebUntisSharp.WebUnitsJsonSchemes;
 
@@ -37,6 +39,7 @@ namespace mrousavy.APIs.WebUntisSharp {
         #region Publics
         public string SessionId;
         public bool SuppressErrors;
+        public static Logger Logger = new Logger(Logger.LogLevel.Debug);
         #endregion
 
         #region Statics
@@ -183,8 +186,10 @@ namespace mrousavy.APIs.WebUntisSharp {
             TeachersResult result = JsonConvert.DeserializeObject<TeachersResult>(responseJson);
 
             string errorMsg = wus.LastError.Message;
-            if (!SuppressErrors && errorMsg != null)
+            if (!SuppressErrors && errorMsg != null) {
+                Logger.Append(Logger.LogLevel.Error, errorMsg);
                 throw new WebUntisException(errorMsg);
+            }
 
             //Return all the Teachers
             return new List<Teacher>(result.result);
@@ -206,11 +211,17 @@ namespace mrousavy.APIs.WebUntisSharp {
             StudentsResult result = JsonConvert.DeserializeObject<StudentsResult>(responseJson);
 
             string errorMsg = wus.LastError.Message;
-            if (!SuppressErrors && errorMsg != null)
+            if (!SuppressErrors && errorMsg != null) {
+                Logger.Append(Logger.LogLevel.Error, errorMsg);
                 throw new WebUntisException(errorMsg);
+            }
 
-            //Return all the Students
-            return new List<Student>(result.result);
+            if (result.result != null) {
+                //Return all the Students
+                return new List<Student>(result.result);
+            } else {
+                return new List<Student>();
+            }
         }
 
         /// <summary>
@@ -234,8 +245,10 @@ namespace mrousavy.APIs.WebUntisSharp {
             ClassesResult result = JsonConvert.DeserializeObject<ClassesResult>(responseJson);
 
             string errorMsg = wus.LastError.Message;
-            if (!SuppressErrors && errorMsg != null)
+            if (!SuppressErrors && errorMsg != null) {
+                Logger.Append(Logger.LogLevel.Error, errorMsg);
                 throw new WebUntisException(errorMsg);
+            }
 
             //Return all the Classes
             return new List<Class>(result.result);
@@ -257,8 +270,10 @@ namespace mrousavy.APIs.WebUntisSharp {
             SubjectsResult result = JsonConvert.DeserializeObject<SubjectsResult>(responseJson);
 
             string errorMsg = wus.LastError.Message;
-            if (!SuppressErrors && errorMsg != null)
+            if (!SuppressErrors && errorMsg != null) {
+                Logger.Append(Logger.LogLevel.Error, errorMsg);
                 throw new WebUntisException(errorMsg);
+            }
 
             //Return all the Subjects
             return new List<Subject>(result.result);
@@ -280,8 +295,10 @@ namespace mrousavy.APIs.WebUntisSharp {
             RoomsResult result = JsonConvert.DeserializeObject<RoomsResult>(responseJson);
 
             string errorMsg = wus.LastError.Message;
-            if (!SuppressErrors && errorMsg != null)
+            if (!SuppressErrors && errorMsg != null) {
+                Logger.Append(Logger.LogLevel.Error, errorMsg);
                 throw new WebUntisException(errorMsg);
+            }
 
             //Return all the Rooms
             return new List<Room>(result.result);
@@ -303,8 +320,10 @@ namespace mrousavy.APIs.WebUntisSharp {
             DepartmentsResult result = JsonConvert.DeserializeObject<DepartmentsResult>(responseJson);
 
             string errorMsg = wus.LastError.Message;
-            if (!SuppressErrors && errorMsg != null)
+            if (!SuppressErrors && errorMsg != null) {
+                Logger.Append(Logger.LogLevel.Error, errorMsg);
                 throw new WebUntisException(errorMsg);
+            }
 
             //Return all the Departments
             return new List<Department>(result.result);
@@ -326,8 +345,10 @@ namespace mrousavy.APIs.WebUntisSharp {
             HolidaysResult result = JsonConvert.DeserializeObject<HolidaysResult>(responseJson);
 
             string errorMsg = wus.LastError.Message;
-            if (!SuppressErrors && errorMsg != null)
+            if (!SuppressErrors && errorMsg != null) {
+                Logger.Append(Logger.LogLevel.Error, errorMsg);
                 throw new WebUntisException(errorMsg);
+            }
 
             //Return all the Holidays
             return new List<Holiday>(result.result);
@@ -349,15 +370,17 @@ namespace mrousavy.APIs.WebUntisSharp {
             Timegrid result = JsonConvert.DeserializeObject<Timegrid>(responseJson);
 
             string errorMsg = wus.LastError.Message;
-            if (!SuppressErrors && errorMsg != null)
+            if (!SuppressErrors && errorMsg != null) {
+                Logger.Append(Logger.LogLevel.Error, errorMsg);
                 throw new WebUntisException(errorMsg);
+            }
 
             //Return the Timegrid
             return result;
         }
 
         /// <summary>
-        /// Get the StatusData
+        /// Information about lesson types and period codes and their colors
         /// </summary>
         /// <returns>The returned StatusData</returns>
         public async Task<StatusData> GetStatusData() {
@@ -372,15 +395,17 @@ namespace mrousavy.APIs.WebUntisSharp {
             StatusData result = JsonConvert.DeserializeObject<StatusData>(responseJson);
 
             string errorMsg = wus.LastError.Message;
-            if (!SuppressErrors && errorMsg != null)
+            if (!SuppressErrors && errorMsg != null) {
+                Logger.Append(Logger.LogLevel.Error, errorMsg);
                 throw new WebUntisException(errorMsg);
+            }
 
             //Return the Status Data
             return result;
         }
 
         /// <summary>
-        /// Get the Current Schoolyear
+        /// Get the current schoolyear
         /// </summary>
         /// <returns>The current Schoolyear</returns>
         public async Task<Schoolyear> GetSchoolyear() {
@@ -395,15 +420,17 @@ namespace mrousavy.APIs.WebUntisSharp {
             Schoolyear result = JsonConvert.DeserializeObject<Schoolyear>(responseJson);
 
             string errorMsg = wus.LastError.Message;
-            if (!SuppressErrors && errorMsg != null)
+            if (!SuppressErrors && errorMsg != null) {
+                Logger.Append(Logger.LogLevel.Error, errorMsg);
                 throw new WebUntisException(errorMsg);
+            }
 
             //Return the Schoolyear
             return result;
         }
 
         /// <summary>
-        /// Get all Schoolyears
+        /// Get a list of all Schoolyears
         /// </summary>
         /// <returns>The returned Schoolyears</returns>
         public async Task<List<Schoolyear>> GetSchoolyears() {
@@ -418,8 +445,10 @@ namespace mrousavy.APIs.WebUntisSharp {
             wus.SchoolYears.SchoolyearResult result = JsonConvert.DeserializeObject<wus.SchoolYears.SchoolyearResult>(responseJson);
 
             string errorMsg = wus.LastError.Message;
-            if (!SuppressErrors && errorMsg != null)
+            if (!SuppressErrors && errorMsg != null) {
+                Logger.Append(Logger.LogLevel.Error, errorMsg);
                 throw new WebUntisException(errorMsg);
+            }
 
             //Return the Schoolyears
             return new List<Schoolyear>(result.result);
@@ -452,15 +481,17 @@ namespace mrousavy.APIs.WebUntisSharp {
             TimetableResult result = JsonConvert.DeserializeObject<TimetableResult>(responseJson);
 
             string errorMsg = wus.LastError.Message;
-            if (!SuppressErrors && errorMsg != null)
+            if (!SuppressErrors && errorMsg != null) {
+                Logger.Append(Logger.LogLevel.Error, errorMsg);
                 throw new WebUntisException(errorMsg);
+            }
 
             //Return the Timetable for the Element
             return result;
         }
 
         /// <summary>
-        /// Get the last import time
+        /// Get the import time of the last lesson/timetable or substitution import from Untis
         /// </summary>
         /// <returns>The returned Import Time</returns>
         public async Task<DateTime> GetLastImportTime() {
@@ -475,15 +506,17 @@ namespace mrousavy.APIs.WebUntisSharp {
             LastImportTimeResult result = JsonConvert.DeserializeObject<LastImportTimeResult>(responseJson);
 
             string errorMsg = wus.LastError.Message;
-            if (!SuppressErrors && errorMsg != null)
+            if (!SuppressErrors && errorMsg != null) {
+                Logger.Append(Logger.LogLevel.Error, errorMsg);
                 throw new WebUntisException(errorMsg);
+            }
 
             //Return the Last Imported Time (DateTime)
-            return result.result;
+            return result.Result;
         }
 
         /// <summary>
-        /// Get the ID of a Person by Parameters
+        /// Get the ID of a Person (teacher/student) by Parameters
         /// </summary>
         /// <param name="personType">The Type of Person | 2 = Teacher, 5 = Student</param>
         /// <param name="surname">The Surname of the Person to query</param>
@@ -509,15 +542,17 @@ namespace mrousavy.APIs.WebUntisSharp {
             SearchPersonIdResult result = JsonConvert.DeserializeObject<SearchPersonIdResult>(responseJson);
 
             string errorMsg = wus.LastError.Message;
-            if (!SuppressErrors && errorMsg != null)
+            if (!SuppressErrors && errorMsg != null) {
+                Logger.Append(Logger.LogLevel.Error, errorMsg);
                 throw new WebUntisException(errorMsg);
+            }
 
             //Return the Person ID
             return result.result;
         }
 
         /// <summary>
-        /// Get Substitutions
+        /// Get Substitutions for the given data range
         /// </summary>
         /// <param name="startDate">The Begin Date of the Substitutions to filter</param>
         /// <param name="endDate">The End Date of the Substitutions to filter</param>
@@ -541,18 +576,20 @@ namespace mrousavy.APIs.WebUntisSharp {
             SubstitutionResult result = JsonConvert.DeserializeObject<SubstitutionResult>(responseJson);
 
             string errorMsg = wus.LastError.Message;
-            if (!SuppressErrors && errorMsg != null)
+            if (!SuppressErrors && errorMsg != null) {
+                Logger.Append(Logger.LogLevel.Error, errorMsg);
                 throw new WebUntisException(errorMsg);
+            }
 
             //Return the Substitutions
             return result.result;
         }
 
         /// <summary>
-        /// Get ClassregEvents
+        /// Get ClassregEvents for the given range (requires permissions)
         /// </summary>
-        /// <param name="startDate">The Begin Date of the ClassregEvents to filter</param>
-        /// <param name="endDate">The End Date of the ClassregEvents to filter</param>
+        /// <param name="startDate">The Begin Date of the ClassregEvents to filter (unix time)</param>
+        /// <param name="endDate">The End Date of the ClassregEvents to filter (unix time)</param>
         /// <returns>The Events(s)</returns>
         public async Task<Event[]> GetClassRegEvents(long startDate, long endDate) {
             //Get the JSON
@@ -571,8 +608,10 @@ namespace mrousavy.APIs.WebUntisSharp {
             ClassregEventsResult result = JsonConvert.DeserializeObject<ClassregEventsResult>(responseJson);
 
             string errorMsg = wus.LastError.Message;
-            if (!SuppressErrors && errorMsg != null)
+            if (!SuppressErrors && errorMsg != null) {
+                Logger.Append(Logger.LogLevel.Error, errorMsg);
                 throw new WebUntisException(errorMsg);
+            }
 
             //Return the ClassregEvent(s)
             return result.result;
@@ -603,8 +642,10 @@ namespace mrousavy.APIs.WebUntisSharp {
             ExamResult result = JsonConvert.DeserializeObject<ExamResult>(responseJson);
 
             string errorMsg = wus.LastError.Message;
-            if (!SuppressErrors && errorMsg != null)
+            if (!SuppressErrors && errorMsg != null) {
+                Logger.Append(Logger.LogLevel.Error, errorMsg);
                 throw new WebUntisException(errorMsg);
+            }
 
             //Return the Exams(s)
             return result.result;
@@ -612,29 +653,29 @@ namespace mrousavy.APIs.WebUntisSharp {
 
 
         /// <summary>
-        /// Get Exam Types (Not yet Implemented)
+        /// Get all Exam Types
         /// </summary>
         /// <exception cref="NotImplementedException"></exception>
         /// <returns>The Exam Types(s)</returns>
-        public Exam[] GetExamTypes() {
-            throw new NotImplementedException();
+        public async Task<Exam[]> GetExamTypes() {
+            //Get the JSON
+            ExamTypes requestExams = new ExamTypes();
 
-            ////Get the JSON
-            //ExamTypes requestExams = new ExamTypes();
+            //Send and receive JSON from WebUntis
+            string requestJson = JsonConvert.SerializeObject(requestExams);
+            string responseJson = await SendJsonAndWait(requestJson, _url, SessionId);
 
-            ////Send and receive JSON from WebUntis
-            //string requestJson = JsonConvert.SerializeObject(requestExams);
-            //string responseJson = SendJsonAndWait(requestJson, _url);
+            //Parse JSON to Class
+            ExamResult result = JsonConvert.DeserializeObject<ExamResult>(responseJson);
 
-            ////Parse JSON to Class
-            //ExamResult result = JsonConvert.DeserializeObject<ExamResult>(responseJson);
+            string errorMsg = wus.LastError.Message;
+            if (!SuppressErrors && errorMsg != null) {
+                Logger.Append(Logger.LogLevel.Error, errorMsg);
+                throw new WebUntisException(errorMsg);
+            }
 
-            //string errorMsg = wus.LastError.Message;
-            //if(!SuppressErrors && errorMsg != null)
-            //    throw new WebUntisException(errorMsg);
-
-            ////Return the Exams Types(s)
-            //return result.result;
+            //Return the Exams Types(s)
+            return result.result;
         }
 
         #endregion
@@ -657,6 +698,7 @@ namespace mrousavy.APIs.WebUntisSharp {
 
             using (StreamWriter streamWriter = new StreamWriter(await httpWebRequest.GetRequestStreamAsync())) {
                 await streamWriter.WriteAsync(json);
+                Logger.Append(Logger.LogLevel.Info, $"Sent json: {json}");
                 streamWriter.Flush();
                 streamWriter.Close();
             }
@@ -680,6 +722,7 @@ namespace mrousavy.APIs.WebUntisSharp {
 
             using (StreamWriter streamWriter = new StreamWriter(await httpWebRequest.GetRequestStreamAsync())) {
                 await streamWriter.WriteAsync(json);
+                Logger.Append(Logger.LogLevel.Info, $"Sent json: {json}");
                 streamWriter.Flush();
                 streamWriter.Close();
             }
@@ -691,6 +734,7 @@ namespace mrousavy.APIs.WebUntisSharp {
 
             using (StreamReader streamReader = new StreamReader(responseStream)) {
                 result = await streamReader.ReadToEndAsync();
+                Logger.Append(Logger.LogLevel.Info, $"Received json: {result}");
             }
 
             return result;
@@ -706,6 +750,7 @@ namespace mrousavy.APIs.WebUntisSharp {
 
             using (StreamWriter streamWriter = new StreamWriter(httpWebRequest.GetRequestStream())) {
                 streamWriter.Write(json);
+                Logger.Append(Logger.LogLevel.Info, $"Sent json: {json}");
                 streamWriter.Flush();
                 streamWriter.Close();
             }
@@ -717,6 +762,7 @@ namespace mrousavy.APIs.WebUntisSharp {
 
             using (StreamReader streamReader = new StreamReader(responseStream)) {
                 result = streamReader.ReadToEnd();
+                Logger.Append(Logger.LogLevel.Info, $"Received json: {result}");
             }
 
             return result;
@@ -730,8 +776,14 @@ namespace mrousavy.APIs.WebUntisSharp {
 
         public void Dispose() {
             SuppressErrors = true;
-            //sync logout
-            Logout().GetAwaiter().GetResult();
+
+            try {
+                //sync logout
+                Logout().GetAwaiter().GetResult();
+            } catch {
+                //already logged out
+            }
+
             GC.SuppressFinalize(this);
         }
         #endregion

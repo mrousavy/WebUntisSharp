@@ -1,8 +1,8 @@
 ﻿using mrousavy.APIs.WebUntisSharp;
 using System;
+using System.IO;
 using System.Windows;
 using System.Windows.Input;
-using WebUntisSharp = mrousavy.APIs.WebUntisSharp;
 
 namespace WebUntisTest {
     /// <summary>
@@ -19,13 +19,20 @@ namespace WebUntisTest {
 
         private async void Submit_Event(object sender, RoutedEventArgs e) {
             try {
-                _untis = new WebUntis(UsernameBox.Text, PasswordBox.Password, SchoolUrlBox.Text, "WebUntisSharp API");
+                WebUntis.Logger.NewMessage += (l, m) => {
+                    Console.WriteLine($"{l}: {m}");
+                    File.AppendAllText("C:\\Users\\Marc\\Desktop\\log.txt", $"{l}: {m}\n\r\n\r\n\r");
+                };
 
-                if (WebUntisSharp.WebUnitsJsonSchemes.LastError.Message != null) {
-                    MessageBox.Show(WebUntisSharp.WebUnitsJsonSchemes.LastError.Message);
+                _untis = await WebUntis.New(UsernameBox.Text, PasswordBox.Password, SchoolUrlBox.Text, "WebUntisSharp API");
+                _untis.SuppressErrors = true;
+
+                if (mrousavy.APIs.WebUntisSharp.WebUnitsJsonSchemes.LastError.Message != null) {
+                    MessageBox.Show(mrousavy.APIs.WebUntisSharp.WebUnitsJsonSchemes.LastError.Message);
                 } else {
                     var departments = await _untis.GetDepartments();
-                    var classregevents = await _untis.GetClassRegEvents(01012015, 01012016);
+                    var exam = await _untis.GetExamTypes();
+                    //var classregevents = await _untis.GetClassRegEvents(01012015, 01012016); // Not allowed
                     var classes = await _untis.GetClasses("1");
                     var exams = await _untis.GetExams(01012015, 01012016, 1);
                     var holidays = await _untis.GetHolidays();
