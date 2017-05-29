@@ -19,11 +19,18 @@ namespace WebUntisTest {
 
         private async void Submit_Event(object sender, RoutedEventArgs e) {
             try {
+                string path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "log.txt");
+
+                //Create or write to file (empty)
+                File.WriteAllText(path, "");
+
                 WebUntis.Logger.NewMessage += (l, m) => {
                     Console.WriteLine($"{l}: {m}");
-                    File.AppendAllText("C:\\Users\\Marc\\Desktop\\log.txt", $"{l}: {m}\n\r\n\r\n\r");
+                    File.AppendAllText(path, $"{l}: {m}\n\r\n\r\n\r");
                 };
 
+                Cursor = Cursors.Wait;
+                Title = "WebUntis Test - Sending requests...";
                 _untis = await WebUntis.New(UsernameBox.Text, PasswordBox.Password, SchoolUrlBox.Text, "WebUntisSharp API");
                 _untis.SuppressErrors = true;
 
@@ -54,6 +61,9 @@ namespace WebUntisTest {
             } catch (Exception ex) {
                 MessageBox.Show("Error: " + ex.Message);
             }
+
+            Cursor = Cursors.Arrow;
+            Title = "WebUntis Test";
         }
 
         private void PasswordBox_OnKeyDown(object sender, KeyEventArgs e) {

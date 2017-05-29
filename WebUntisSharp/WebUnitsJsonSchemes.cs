@@ -141,7 +141,12 @@ namespace mrousavy.APIs.WebUntisSharp {
             public class GetStudents : WebUntisQuery {
                 public new string id = "4";
                 public new readonly string method = "getStudents";
+
+                //empty params array required by untis
+                public Params[] @params = new Params[0];
             }
+
+            public class Params { }
 
             //Individual Student
             public class Student {
@@ -563,7 +568,7 @@ namespace mrousavy.APIs.WebUntisSharp {
             public class RequestExams : WebUntisQuery {
                 public new string id = "21";
                 public new readonly string method = "getExams";
-                public Params @params;
+                public Params[] @params = new Params[1];
 
                 public class Params {
                     public int examTypeId;

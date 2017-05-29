@@ -115,8 +115,10 @@ namespace mrousavy.APIs.WebUntisSharp {
         /// <param name="client">The Client (e.g. "ANDROID")</param>
         /// <returns></returns>
         public async Task Login(string user, string password, string client) {
-            if (_loggedIn)
+            if (_loggedIn) {
+                Logger.Append(Logger.LogLevel.Error, "Tried to login on a logged in object!");
                 throw new WebUntisException("This object is already logged in!");
+            }
 
             //Login to WebUntis
             //Get the JSON
@@ -132,15 +134,19 @@ namespace mrousavy.APIs.WebUntisSharp {
             string requestJson = JsonConvert.SerializeObject(auth);
             string responseJson = await SendJsonAndWait(requestJson, _url, null);
 
-            if (responseJson.Contains("<!DOCTYPE html>"))
+            if (responseJson.Contains("<!DOCTYPE html>")) {
+                Logger.Append(Logger.LogLevel.Error, "The school url is invalid, server responded with HTML!");
                 throw new WebUntisException("The school url is invalid, server responded with HTML!");
+            }
 
             //Parse JSON to Class
             AuthenticationResult result = JsonConvert.DeserializeObject<AuthenticationResult>(responseJson);
 
             string errorMsg = wus.LastError.Message;
-            if (!SuppressErrors && errorMsg != null)
+            if (/*!SuppressErrors &&*/ errorMsg != null) {
+                Logger.Append(Logger.LogLevel.Error, errorMsg);
                 throw new WebUntisException(errorMsg);
+            }
 
             //Get Session ID
             SessionId = result.result.sessionId;
@@ -154,8 +160,10 @@ namespace mrousavy.APIs.WebUntisSharp {
         /// An application should always logout as soon as possible to free system resources on the server
         /// </summary>
         public async Task Logout() {
-            if (!_loggedIn)
+            if (!_loggedIn) {
+                Logger.Append(Logger.LogLevel.Error, "Tried to log out a not logged in object!");
                 throw new WebUntisException("This object is not logged in!");
+            }
 
             //Get the JSON
             Logout logout = new Logout();
@@ -165,8 +173,10 @@ namespace mrousavy.APIs.WebUntisSharp {
             await SendJson(requestJson, _url, SessionId);
 
             string errorMsg = wus.LastError.Message;
-            if (!SuppressErrors && errorMsg != null)
+            if (!SuppressErrors && errorMsg != null) {
+                Logger.Append(Logger.LogLevel.Error, errorMsg);
                 throw new WebUntisException(errorMsg);
+            }
         }
 
         #endregion
@@ -219,12 +229,7 @@ namespace mrousavy.APIs.WebUntisSharp {
                 throw new WebUntisException(errorMsg);
             }
 
-            if (result.result != null) {
-                //Return all the Students
-                return new List<Student>(result.result);
-            } else {
-                return new List<Student>();
-            }
+            return result.result != null ? new List<Student>(result.result) : new List<Student>();
         }
 
         /// <summary>
@@ -630,10 +635,12 @@ namespace mrousavy.APIs.WebUntisSharp {
         public async Task<Exam[]> GetExams(long startDate, long endDate, int examTypeId) {
             //Get the JSON
             RequestExams requestExams = new RequestExams {
-                @params = new RequestExams.Params {
-                    startDate = startDate,
-                    endDate = endDate,
-                    examTypeId = examTypeId
+                @params = {
+                    [0] = new RequestExams.Params {
+                        startDate = startDate,
+                        endDate = endDate,
+                        examTypeId = examTypeId
+                    }
                 }
             };
 
