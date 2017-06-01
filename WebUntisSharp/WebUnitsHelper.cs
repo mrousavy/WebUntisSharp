@@ -269,7 +269,7 @@ namespace mrousavy.APIs.WebUntisSharp {
         public async Task<List<Class>> GetClasses() {
             //Get the JSON
             GetClassesDefault classes = new GetClassesDefault {
-                @params = new GetClassesDefault.Params() { }
+                @params = new GetClassesDefault.Params()
             };
 
             //Send and receive JSON from WebUntis
@@ -452,7 +452,7 @@ namespace mrousavy.APIs.WebUntisSharp {
             string responseJson = await SendJsonAndWait(requestJson, _url, SessionId);
 
             //Parse JSON to Class
-            Schoolyear result = JsonConvert.DeserializeObject<Schoolyear>(responseJson);
+            Schoolyear result = JsonConvert.DeserializeObject<wus.CurrentSchoolyear.SchoolyearResult>(responseJson).result;
 
             string errorMsg = wus.LastError.Message;
             if (!SuppressErrors && errorMsg != null) {

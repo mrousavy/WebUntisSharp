@@ -350,7 +350,7 @@ namespace mrousavy.APIs.WebUntisSharp {
 
             //Response for Get Schoolyear
             public class SchoolyearResult : WebUntisResult {
-                public new Schoolyear[] result;
+                public new Schoolyear result;
             }
 
             //Individual Schoolyears
