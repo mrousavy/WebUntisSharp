@@ -263,6 +263,33 @@ namespace mrousavy.APIs.WebUntisSharp {
         }
 
         /// <summary>
+        /// Get a List of all Classes for current schoolyear
+        /// </summary>
+        /// <returns>The <see cref="List{Class}"/> of all returned Classes.</returns>
+        public async Task<List<Class>> GetClasses() {
+            //Get the JSON
+            GetClassesDefault classes = new GetClassesDefault {
+                @params = new GetClassesDefault.Params() { }
+            };
+
+            //Send and receive JSON from WebUntis
+            string requestJson = JsonConvert.SerializeObject(classes);
+            string responseJson = await SendJsonAndWait(requestJson, _url, SessionId);
+
+            //Parse JSON to Class
+            ClassesResult result = JsonConvert.DeserializeObject<ClassesResult>(responseJson);
+
+            string errorMsg = wus.LastError.Message;
+            if (!SuppressErrors && errorMsg != null) {
+                Logger.Append(Logger.LogLevel.Error, errorMsg);
+                throw new WebUntisException(errorMsg);
+            }
+
+            //Return all the Classes
+            return new List<Class>(result.result);
+        }
+
+        /// <summary>
         /// Get a List of all Subjects
         /// </summary>
         /// <returns>The <see cref="List{Subject}"/> of all returned Subjects.</returns>

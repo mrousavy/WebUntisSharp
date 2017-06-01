@@ -178,6 +178,15 @@ namespace mrousavy.APIs.WebUntisSharp {
                 }
             }
 
+            //Get Classes (Klassen) with default schoolyear
+            public class GetClassesDefault : WebUntisQuery {
+                public new string id = "5";
+                public new readonly string method = "getKlassen";
+                public Params @params;
+
+                public class Params { }
+            }
+
             //Individual Classes (Klassen)
             public class Class {
                 public int id;
