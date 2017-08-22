@@ -6,6 +6,7 @@
   <p align="center">A Wrapper of the <a href="http://www.untis.at/Downloads/int/Manuals/de/WebUntis.pdf">WebUntis</a> JSON API for .NET for sending and receiving Untis Informations</p>
   <p align="center">
     <a href="https://github.com/mrousavy/WebUntisSharp/wiki"><img src="https://img.shields.io/badge/API-Documentation-green.svg" alt="Documentation"></a>
+    <a href="https://www.nuget.org/packages/WebUntisSharp"><img src="https://img.shields.io/nuget/dt/WebUntisSharp.svg" alt="NuGet"></a>
   </p>
 </p>
 
