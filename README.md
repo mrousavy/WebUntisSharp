@@ -8,6 +8,9 @@
     <a href="https://github.com/mrousavy/WebUntisSharp/wiki"><img src="https://img.shields.io/badge/API-Documentation-green.svg" alt="Documentation"></a>
     <a href="https://www.nuget.org/packages/WebUntisSharp"><img src="https://img.shields.io/nuget/dt/WebUntisSharp.svg" alt="NuGet"></a>
   </p>
+  <p align="center">
+    <a href='https://ko-fi.com/F1F8CLXG' target='_blank'><img height='36' style='border:0px;height:36px;' src='https://az743702.vo.msecnd.net/cdn/kofi2.png?v=0' border='0' alt='Buy Me a Coffee at ko-fi.com' /></a>
+  </p>
 </p>
 
 
